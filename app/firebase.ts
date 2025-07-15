@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -22,11 +23,6 @@ export const storage = getStorage(app);
 
 // only run analytics in the browser
 export const analytics =
-  typeof window !== "undefined"
-    ? // lazy-import so this code isn’t even bundled for SSR
-      await import("firebase/analytics").then(({ getAnalytics }) =>
-        getAnalytics(app)
-      )
-    : null;
+  typeof window !== "undefined" ? getAnalytics(app) : null;
 
 export default app;
