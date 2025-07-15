@@ -44,11 +44,6 @@ export async function clientLoader() {
   return { users, teams, lines };
 }
 
-// HydrateFallback is rendered while the client loader is running
-export function HydrateFallback() {
-  return <div>Loading...</div>;
-}
-
 export default function ChildRoute({ loaderData }: Route.ComponentProps) {
   const { users, teams, lines } = loaderData;
 

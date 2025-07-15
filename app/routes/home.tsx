@@ -9,7 +9,7 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export function loader() {
+export function clientLoader() {
   return { message: "Hello from Vercel" };
 }
 
