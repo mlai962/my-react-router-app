@@ -6,6 +6,13 @@ import type { User } from "~/model/user";
 import type { Team } from "~/model/team";
 import type { Line } from "~/model/line";
 
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "New React Router App Child Route" },
+    { name: "description", content: "React Router App Child Route" },
+  ];
+}
+
 export async function clientLoader() {
   const [usersSnap, teamsSnap, linesSnap] = await Promise.all([
     getDocs(collection(db, "users") as CollectionReference<User>),
