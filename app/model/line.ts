@@ -1,3 +1,3 @@
-import type { DocumentData } from "firebase/firestore";
+import type { BaseFirebaseDocument } from "./base-firebase-document";
 
-export type Line = { id: string; name: string } & DocumentData;
+export type Line = BaseFirebaseDocument & {};
