@@ -1,16 +1,27 @@
 import { useState } from "react";
+import type { OverUnder } from "~/model/over-under";
 
-export default function OverUnderInput() {
+type OverUnderInputProps = {
+  onChange: (overUnder: OverUnder) => void;
+};
+
+export default function OverUnderInput({ onChange }: OverUnderInputProps) {
   const [isOverSelected, setIsOverSelected] = useState(false);
   const [isUnderSelected, setIsUnderSelected] = useState(false);
 
   const [value, setValue] = useState<number>(0);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // e.target.value is a string, so parse it
     const parsed = parseFloat(e.target.value);
     // if the field is empty, parsed will be NaN
-    setValue(!isNaN(parsed) ? parsed : 0);
+    const newValue = !isNaN(parsed) ? parsed : 0;
+    setValue(newValue);
+
+    onChange({
+      over: isOverSelected,
+      value: newValue,
+    });
   };
 
   return (
@@ -67,7 +78,7 @@ export default function OverUnderInput() {
         step="0.5"
         min="0.5"
         defaultValue="0.5"
-        onChange={handleChange}
+        onChange={handleValueChange}
       />
     </div>
   );
