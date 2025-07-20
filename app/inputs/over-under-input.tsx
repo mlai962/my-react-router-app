@@ -4,6 +4,15 @@ export default function OverUnderInput() {
   const [isOverSelected, setIsOverSelected] = useState(false);
   const [isUnderSelected, setIsUnderSelected] = useState(false);
 
+  const [value, setValue] = useState<number>(0);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // e.target.value is a string, so parse it
+    const parsed = parseFloat(e.target.value);
+    // if the field is empty, parsed will be NaN
+    setValue(!isNaN(parsed) ? parsed : 0);
+  };
+
   return (
     <div
       className="flex w-max rounded-lg gap-2 p-2 border-1 
@@ -58,6 +67,7 @@ export default function OverUnderInput() {
         step="0.5"
         min="0.5"
         defaultValue="0.5"
+        onChange={handleChange}
       />
     </div>
   );
