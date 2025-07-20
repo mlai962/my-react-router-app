@@ -47,5 +47,12 @@ export async function clientLoader() {
 export default function ChildRoute({ loaderData }: Route.ComponentProps) {
   const { users, teams, lines } = loaderData;
 
-  return <Child firebaseOptions={app.options} users={users} />;
+  return (
+    <Child
+      firebaseOptions={app.options}
+      users={users}
+      teams={teams}
+      lines={lines}
+    />
+  );
 }
