@@ -11,6 +11,16 @@ export default function OverUnderInput({ onChange }: OverUnderInputProps) {
 
   const [value, setValue] = useState<number>(0);
 
+  const handleOverUnderChange = (isOver: boolean) => {
+    setIsOverSelected(isOver);
+    setIsUnderSelected(!isOver);
+
+    onChange({
+      over: isOver,
+      value: value,
+    });
+  };
+
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // e.target.value is a string, so parse it
     const parsed = parseFloat(e.target.value);
@@ -43,8 +53,7 @@ export default function OverUnderInput({ onChange }: OverUnderInputProps) {
             }
         `}
         onClick={() => {
-          setIsOverSelected(true);
-          setIsUnderSelected(false);
+          handleOverUnderChange(true);
         }}
       >
         O
@@ -62,8 +71,7 @@ export default function OverUnderInput({ onChange }: OverUnderInputProps) {
             }
         `}
         onClick={() => {
-          setIsUnderSelected(true);
-          setIsOverSelected(false);
+          handleOverUnderChange(false);
         }}
       >
         U
