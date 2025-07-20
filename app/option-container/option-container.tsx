@@ -50,7 +50,7 @@ export default function OptionContainer({
       const lruToMru = [...selectedIds].reverse();
       onSelectionChange(lruToMru);
     }
-  }, [selectedIds, onSelectionChange]);
+  }, [selectedIds]);
 
   return (
     <div>
