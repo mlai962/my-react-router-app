@@ -1,6 +1,8 @@
 import { type FirebaseOptions } from "firebase/app";
 import { useState } from "react";
+import OverUnderInput from "~/inputs/over-under-input";
 import type { Line } from "~/model/line";
+import type { OverUnder } from "~/model/over-under";
 import type { Team } from "~/model/team";
 import type { User } from "~/model/user";
 import OptionContainer from "~/option-container/option-container";
@@ -15,6 +17,10 @@ type ChildProps = {
 export function Child({ firebaseOptions, users, teams, lines }: ChildProps) {
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const userMap = new Map(users.map((user) => [user.id, user]));
+  const [overUnder, setOverUnder] = useState<OverUnder>({
+    over: false,
+    value: 0.5,
+  });
 
   return (
     <main className="flex-col p-8 space-y-4">
@@ -56,6 +62,12 @@ export function Child({ firebaseOptions, users, teams, lines }: ChildProps) {
         maxOptionsSelectable={1}
         onSelectionChange={(selectionOrder) => {}}
       ></OptionContainer>
+
+      <OverUnderInput
+        onChange={(overUnder) => {
+          setOverUnder(overUnder);
+        }}
+      ></OverUnderInput>
     </main>
   );
 }
