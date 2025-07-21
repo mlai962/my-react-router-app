@@ -15,10 +15,14 @@ type ChildProps = {
 };
 
 export function Child({ firebaseOptions, users, teams, lines }: ChildProps) {
-  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const userMap = new Map(users.map((user) => [user.id, user]));
+
+  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
+  const [selectedTeamIds, setSelectedTeamIds] = useState<string[]>([]);
+  const [selectedLineId, setSelectedLineId] = useState<string>("");
+
   const [overUnder, setOverUnder] = useState<OverUnder>({
-    over: false,
+    over: true,
     value: 0.5,
   });
 
@@ -53,14 +57,18 @@ export function Child({ firebaseOptions, users, teams, lines }: ChildProps) {
         optionContainerName="Teams"
         options={teams}
         maxOptionsSelectable={2}
-        onSelectionChange={(selectionOrder) => {}}
+        onSelectionChange={(selectionOrder) => {
+          setSelectedTeamIds(selectionOrder);
+        }}
       ></OptionContainer>
 
       <OptionContainer
         optionContainerName="Lines"
         options={lines}
         maxOptionsSelectable={1}
-        onSelectionChange={(selectionOrder) => {}}
+        onSelectionChange={(selectionOrder) => {
+          setSelectedLineId(selectionOrder[0] || "");
+        }}
       ></OptionContainer>
 
       <OverUnderInput
