@@ -1,19 +1,21 @@
 import { useState } from "react";
-import type { OverUnder } from "~/model/over-under";
+import type { OverUnder } from "~/model/binary-option-and-number";
 
-type OverUnderInputProps = {
+type BinaryOptionAndNumberInputProps = {
   onChange: (overUnder: OverUnder) => void;
 };
 
-export default function OverUnderInput({ onChange }: OverUnderInputProps) {
-  const [isOverSelected, setIsOverSelected] = useState(true);
-  const [isUnderSelected, setIsUnderSelected] = useState(false);
+export default function BinaryOptionAndNumberInput({
+  onChange,
+}: BinaryOptionAndNumberInputProps) {
+  const [isOptionOneSelected, setIsOptionOneSelected] = useState(true);
+  const [isOptionTwoSelected, setIsOptionTwoSelected] = useState(false);
 
   const [value, setValue] = useState<number>(0.5);
 
-  const handleOverUnderChange = (isOver: boolean) => {
-    setIsOverSelected(isOver);
-    setIsUnderSelected(!isOver);
+  const handleOptionChange = (isOver: boolean) => {
+    setIsOptionOneSelected(isOver);
+    setIsOptionTwoSelected(!isOver);
 
     onChange({
       over: isOver,
@@ -29,7 +31,7 @@ export default function OverUnderInput({ onChange }: OverUnderInputProps) {
     setValue(newValue);
 
     onChange({
-      over: isOverSelected,
+      over: isOptionOneSelected,
       value: newValue,
     });
   };
@@ -47,13 +49,13 @@ export default function OverUnderInput({ onChange }: OverUnderInputProps) {
           active:bg-purple-300 dark:active:bg-purple-500
           hover:cursor-pointer hover:disabled:cursor-not-allowed
             ${
-              isOverSelected
+              isOptionOneSelected
                 ? "bg-purple-300 dark:bg-purple-500"
                 : "bg-gray-400 dark:bg-gray-800"
             }
         `}
         onClick={() => {
-          handleOverUnderChange(true);
+          handleOptionChange(true);
         }}
       >
         O
@@ -65,13 +67,13 @@ export default function OverUnderInput({ onChange }: OverUnderInputProps) {
           active:bg-purple-300 dark:active:bg-purple-500
           hover:cursor-pointer hover:disabled:cursor-not-allowed
             ${
-              isUnderSelected
+              isOptionTwoSelected
                 ? "bg-purple-300 dark:bg-purple-500"
                 : "bg-gray-400 dark:bg-gray-800"
             }
         `}
         onClick={() => {
-          handleOverUnderChange(false);
+          handleOptionChange(false);
         }}
       >
         U
