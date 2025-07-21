@@ -1,8 +1,10 @@
 import { type FirebaseOptions } from "firebase/app";
 import { useState } from "react";
-import BinaryOptionAndNumberInput from "~/inputs/binary-option-and-number-input";
+import BinaryOptionAndNumberInput, {
+  BinaryOptionType,
+} from "~/inputs/binary-option-and-number-input";
 import type { Line } from "~/model/line";
-import type { OverUnder } from "~/model/binary-option-and-number";
+import { OverUnder } from "~/model/binary-option-and-number";
 import type { Team } from "~/model/team";
 import type { User } from "~/model/user";
 import OptionContainer from "~/option-container/option-container";
@@ -72,9 +74,12 @@ export function Child({ firebaseOptions, users, teams, lines }: ChildProps) {
       ></OptionContainer>
 
       <BinaryOptionAndNumberInput
-        onChange={(overUnder) => {
-          setOverUnder(overUnder);
+        onChange={(binaryOption) => {
+          if (binaryOption instanceof OverUnder) {
+            setOverUnder(binaryOption);
+          }
         }}
+        type={BinaryOptionType.OVER_UNDER}
       ></BinaryOptionAndNumberInput>
     </main>
   );

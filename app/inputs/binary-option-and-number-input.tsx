@@ -1,26 +1,30 @@
 import { useState } from "react";
-import type { OverUnder } from "~/model/binary-option-and-number";
+import { Handicap, OverUnder } from "~/model/binary-option-and-number";
+
+export enum BinaryOptionType {
+  OVER_UNDER,
+  HANDICAP,
+}
 
 type BinaryOptionAndNumberInputProps = {
-  onChange: (overUnder: OverUnder) => void;
+  onChange: (binaryOption: OverUnder | Handicap) => void;
+  type: BinaryOptionType;
 };
 
 export default function BinaryOptionAndNumberInput({
   onChange,
+  type,
 }: BinaryOptionAndNumberInputProps) {
   const [isOptionOneSelected, setIsOptionOneSelected] = useState(true);
   const [isOptionTwoSelected, setIsOptionTwoSelected] = useState(false);
 
   const [value, setValue] = useState<number>(0.5);
 
-  const handleOptionChange = (isOver: boolean) => {
-    setIsOptionOneSelected(isOver);
-    setIsOptionTwoSelected(!isOver);
+  const handleOptionChange = (isOptionOne: boolean) => {
+    setIsOptionOneSelected(isOptionOne);
+    setIsOptionTwoSelected(!isOptionOne);
 
-    onChange({
-      over: isOver,
-      value: value,
-    });
+    executeOnChange(isOptionOne, value);
   };
 
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,10 +34,15 @@ export default function BinaryOptionAndNumberInput({
     const newValue = !isNaN(parsed) ? parsed : 0;
     setValue(newValue);
 
-    onChange({
-      over: isOptionOneSelected,
-      value: newValue,
-    });
+    executeOnChange(isOptionOneSelected, newValue);
+  };
+
+  const executeOnChange = (isOptionOne: boolean, value: number) => {
+    if (type === BinaryOptionType.OVER_UNDER) {
+      onChange(new OverUnder(isOptionOne, value));
+    } else if (type === BinaryOptionType.HANDICAP) {
+      onChange(new Handicap(isOptionOne, value));
+    }
   };
 
   return (
@@ -58,7 +67,7 @@ export default function BinaryOptionAndNumberInput({
           handleOptionChange(true);
         }}
       >
-        O
+        {type === BinaryOptionType.OVER_UNDER ? "O" : "+"}
       </button>
       <button
         className={`w-16 h-16 rounded-lg border-1
@@ -76,7 +85,7 @@ export default function BinaryOptionAndNumberInput({
           handleOptionChange(false);
         }}
       >
-        U
+        {type === BinaryOptionType.OVER_UNDER ? "U" : "-"}
       </button>
       <input
         className={`w-24 h-16 rounded-lg border-1 p-2
