@@ -1,8 +1,10 @@
 import { type FirebaseOptions } from "firebase/app";
 import { useState } from "react";
-import OverUnderInput from "~/inputs/over-under-input";
+import BinaryOptionAndNumberInput, {
+  BinaryOptionType,
+} from "~/inputs/binary-option-and-number-input";
 import type { Line } from "~/model/line";
-import type { OverUnder } from "~/model/over-under";
+import { Handicap, OverUnder } from "~/model/binary-option-and-number";
 import type { Team } from "~/model/team";
 import type { User } from "~/model/user";
 import OptionContainer from "~/option-container/option-container";
@@ -23,6 +25,11 @@ export function Child({ firebaseOptions, users, teams, lines }: ChildProps) {
 
   const [overUnder, setOverUnder] = useState<OverUnder>({
     over: true,
+    value: 0.5,
+  });
+
+  const [handicap, setHandicap] = useState<Handicap>({
+    plus: true,
     value: 0.5,
   });
 
@@ -71,11 +78,25 @@ export function Child({ firebaseOptions, users, teams, lines }: ChildProps) {
         }}
       ></OptionContainer>
 
-      <OverUnderInput
-        onChange={(overUnder) => {
-          setOverUnder(overUnder);
+      <div className="flex justify-between">
+      <BinaryOptionAndNumberInput
+        onChange={(binaryOption) => {
+          if (binaryOption instanceof OverUnder) {
+            setOverUnder(binaryOption);
+          }
         }}
-      ></OverUnderInput>
+        type={BinaryOptionType.OVER_UNDER}
+      ></BinaryOptionAndNumberInput>
+
+        <BinaryOptionAndNumberInput
+          onChange={(binaryOption) => {
+            if (binaryOption instanceof Handicap) {
+              setHandicap(binaryOption);
+            }
+          }}
+          type={BinaryOptionType.HANDICAP}
+        ></BinaryOptionAndNumberInput>
+      </div>
     </main>
   );
 }

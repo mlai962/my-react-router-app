@@ -1,24 +1,30 @@
 import { useState } from "react";
-import type { OverUnder } from "~/model/over-under";
+import { Handicap, OverUnder } from "~/model/binary-option-and-number";
 
-type OverUnderInputProps = {
-  onChange: (overUnder: OverUnder) => void;
+export enum BinaryOptionType {
+  OVER_UNDER,
+  HANDICAP,
+}
+
+type BinaryOptionAndNumberInputProps = {
+  onChange: (binaryOption: OverUnder | Handicap) => void;
+  type: BinaryOptionType;
 };
 
-export default function OverUnderInput({ onChange }: OverUnderInputProps) {
-  const [isOverSelected, setIsOverSelected] = useState(true);
-  const [isUnderSelected, setIsUnderSelected] = useState(false);
+export default function BinaryOptionAndNumberInput({
+  onChange,
+  type,
+}: BinaryOptionAndNumberInputProps) {
+  const [isOptionOneSelected, setIsOptionOneSelected] = useState(true);
+  const [isOptionTwoSelected, setIsOptionTwoSelected] = useState(false);
 
   const [value, setValue] = useState<number>(0.5);
 
-  const handleOverUnderChange = (isOver: boolean) => {
-    setIsOverSelected(isOver);
-    setIsUnderSelected(!isOver);
+  const handleOptionChange = (isOptionOne: boolean) => {
+    setIsOptionOneSelected(isOptionOne);
+    setIsOptionTwoSelected(!isOptionOne);
 
-    onChange({
-      over: isOver,
-      value: value,
-    });
+    executeOnChange(isOptionOne, value);
   };
 
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,10 +34,15 @@ export default function OverUnderInput({ onChange }: OverUnderInputProps) {
     const newValue = !isNaN(parsed) ? parsed : 0;
     setValue(newValue);
 
-    onChange({
-      over: isOverSelected,
-      value: newValue,
-    });
+    executeOnChange(isOptionOneSelected, newValue);
+  };
+
+  const executeOnChange = (isOptionOne: boolean, value: number) => {
+    if (type === BinaryOptionType.OVER_UNDER) {
+      onChange(new OverUnder(isOptionOne, value));
+    } else if (type === BinaryOptionType.HANDICAP) {
+      onChange(new Handicap(isOptionOne, value));
+    }
   };
 
   return (
@@ -47,16 +58,16 @@ export default function OverUnderInput({ onChange }: OverUnderInputProps) {
           active:bg-purple-300 dark:active:bg-purple-500
           hover:cursor-pointer hover:disabled:cursor-not-allowed
             ${
-              isOverSelected
+              isOptionOneSelected
                 ? "bg-purple-300 dark:bg-purple-500"
                 : "bg-gray-400 dark:bg-gray-800"
             }
         `}
         onClick={() => {
-          handleOverUnderChange(true);
+          handleOptionChange(true);
         }}
       >
-        O
+        {type === BinaryOptionType.OVER_UNDER ? "O" : "+"}
       </button>
       <button
         className={`w-16 h-16 rounded-lg border-1
@@ -65,16 +76,16 @@ export default function OverUnderInput({ onChange }: OverUnderInputProps) {
           active:bg-purple-300 dark:active:bg-purple-500
           hover:cursor-pointer hover:disabled:cursor-not-allowed
             ${
-              isUnderSelected
+              isOptionTwoSelected
                 ? "bg-purple-300 dark:bg-purple-500"
                 : "bg-gray-400 dark:bg-gray-800"
             }
         `}
         onClick={() => {
-          handleOverUnderChange(false);
+          handleOptionChange(false);
         }}
       >
-        U
+        {type === BinaryOptionType.OVER_UNDER ? "U" : "-"}
       </button>
       <input
         className={`w-24 h-16 rounded-lg border-1 p-2
