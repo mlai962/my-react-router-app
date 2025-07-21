@@ -9,7 +9,7 @@ export default function OverUnderInput({ onChange }: OverUnderInputProps) {
   const [isOverSelected, setIsOverSelected] = useState(false);
   const [isUnderSelected, setIsUnderSelected] = useState(false);
 
-  const [value, setValue] = useState<number>(0);
+  const [value, setValue] = useState<number>(0.5);
 
   const handleOverUnderChange = (isOver: boolean) => {
     setIsOverSelected(isOver);
