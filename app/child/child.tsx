@@ -82,14 +82,14 @@ export function Child({ firebaseOptions, users, teams, lines }: ChildProps) {
       ></OptionContainer>
 
       <div className="max-sm:grid-cols-1 max-md:grid md:flex gap-4 max-md:grid-cols-2 md:justify-between">
-      <BinaryOptionAndNumberInput
-        onChange={(binaryOption) => {
-          if (binaryOption instanceof OverUnder) {
-            setOverUnder(binaryOption);
-          }
-        }}
-        type={BinaryOptionType.OVER_UNDER}
-      ></BinaryOptionAndNumberInput>
+        <BinaryOptionAndNumberInput
+          onChange={(binaryOption) => {
+            if (binaryOption instanceof OverUnder) {
+              setOverUnder(binaryOption);
+            }
+          }}
+          type={BinaryOptionType.OVER_UNDER}
+        ></BinaryOptionAndNumberInput>
 
         <BinaryOptionAndNumberInput
           onChange={(binaryOption) => {
