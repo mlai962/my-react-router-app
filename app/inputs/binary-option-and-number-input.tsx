@@ -48,7 +48,7 @@ export default function BinaryOptionAndNumberInput({
   return (
     <div
       className="flex w-max rounded-lg gap-2 p-2 border-1 
-        bg-gray-400 dark:bg-gray-800 
+        bg-gray-400 dark:bg-purple-950/10
         border-purple-500 dark:border-purple-700"
     >
       <button
@@ -59,15 +59,21 @@ export default function BinaryOptionAndNumberInput({
           hover:cursor-pointer hover:disabled:cursor-not-allowed
             ${
               isOptionOneSelected
-                ? "bg-purple-300 dark:bg-purple-500"
-                : "bg-gray-400 dark:bg-gray-800"
+                ? "bg-purple-300 dark:bg-purple-500/75"
+                : "bg-gray-400 dark:bg-purple-700/50"
             }
         `}
         onClick={() => {
           handleOptionChange(true);
         }}
       >
-        {type === BinaryOptionType.OVER_UNDER ? "O" : "+"}
+        <p
+          className={`text-base ${
+            isOptionOneSelected ? "font-extrabold" : "font-normal"
+          }`}
+        >
+          {type === BinaryOptionType.OVER_UNDER ? "O" : "+"}
+        </p>
       </button>
       <button
         className={`w-16 h-16 rounded-lg border-1
@@ -77,15 +83,21 @@ export default function BinaryOptionAndNumberInput({
           hover:cursor-pointer hover:disabled:cursor-not-allowed
             ${
               isOptionTwoSelected
-                ? "bg-purple-300 dark:bg-purple-500"
-                : "bg-gray-400 dark:bg-gray-800"
+                ? "bg-purple-300 dark:bg-purple-500/75"
+                : "bg-gray-400 dark:bg-purple-700/50"
             }
         `}
         onClick={() => {
           handleOptionChange(false);
         }}
       >
-        {type === BinaryOptionType.OVER_UNDER ? "U" : "-"}
+        <p
+          className={`text-base ${
+            isOptionTwoSelected ? "font-extrabold" : "font-normal"
+          }`}
+        >
+          {type === BinaryOptionType.OVER_UNDER ? "U" : "-"}
+        </p>
       </button>
       <input
         className={`w-24 h-16 rounded-lg border-1 p-2
