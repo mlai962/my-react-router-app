@@ -1,16 +1,13 @@
 import { collection, CollectionReference, getDocs } from "firebase/firestore";
-import { Child } from "~/child/child";
+import { BetLog } from "~/bet-log/bet-log";
 import app, { db } from "~/firebase";
-import type { Route } from "./+types/child-route";
+import type { Route } from "./+types/bet-log-route";
 import type { User } from "~/model/user";
 import type { Team } from "~/model/team";
 import type { Line } from "~/model/line";
 
 export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "New React Router App Child Route" },
-    { name: "description", content: "React Router App Child Route" },
-  ];
+  return [{ title: "Bet Log" }, { name: "description", content: "Bet Log" }];
 }
 
 export async function clientLoader() {
@@ -25,30 +22,24 @@ export async function clientLoader() {
     id: doc.id,
   }));
 
-  console.log("Users:", users);
-
   const teams = teamsSnap.docs.map((doc) => ({
     ...doc.data(),
     id: doc.id,
   }));
-
-  console.log("Teams:", teams);
 
   const lines = linesSnap.docs.map((doc) => ({
     ...doc.data(),
     id: doc.id,
   }));
 
-  console.log("Lines:", lines);
-
   return { users, teams, lines };
 }
 
-export default function ChildRoute({ loaderData }: Route.ComponentProps) {
+export default function BetLogRoute({ loaderData }: Route.ComponentProps) {
   const { users, teams, lines } = loaderData;
 
   return (
-    <Child
+    <BetLog
       firebaseOptions={app.options}
       users={users}
       teams={teams}

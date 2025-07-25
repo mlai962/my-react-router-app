@@ -10,14 +10,14 @@ import type { User } from "~/model/user";
 import OptionContainer from "~/option-container/option-container";
 import BetAmountInput from "~/inputs/bet-amount-input";
 
-type ChildProps = {
+type BetLogProps = {
   firebaseOptions: FirebaseOptions;
   users: User[];
   teams: Team[];
   lines: Line[];
 };
 
-export function Child({ firebaseOptions, users, teams, lines }: ChildProps) {
+export function BetLog({ firebaseOptions, users, teams, lines }: BetLogProps) {
   const userMap = new Map(users.map((user) => [user.id, user]));
 
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
