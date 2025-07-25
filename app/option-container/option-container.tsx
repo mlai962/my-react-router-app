@@ -56,8 +56,8 @@ export default function OptionContainer({
     <div>
       <p className="px-2 font-bold text-xl">{optionContainerName}</p>
       <div
-        className="flex w-full rounded-lg gap-2 p-2 border-1 
-            bg-gray-400 dark:bg-gray-800 
+        className="flex flex-wrap w-full rounded-lg gap-2 p-2 border-1 
+            bg-gray-400 dark:bg-purple-950/10
             border-purple-500 dark:border-purple-700"
       >
         {options.map((option) => (

@@ -8,6 +8,7 @@ import { Handicap, OverUnder } from "~/model/binary-option-and-number";
 import type { Team } from "~/model/team";
 import type { User } from "~/model/user";
 import OptionContainer from "~/option-container/option-container";
+import BetAmountInput from "~/inputs/bet-amount-input";
 
 type ChildProps = {
   firebaseOptions: FirebaseOptions;
@@ -32,6 +33,8 @@ export function Child({ firebaseOptions, users, teams, lines }: ChildProps) {
     plus: true,
     value: 0.5,
   });
+
+  const [betAmount, setBetAmount] = useState<number>(0);
 
   return (
     <main className="flex-col p-8 space-y-4">
@@ -78,7 +81,7 @@ export function Child({ firebaseOptions, users, teams, lines }: ChildProps) {
         }}
       ></OptionContainer>
 
-      <div className="flex justify-between">
+      <div className="max-sm:grid-cols-1 max-md:grid md:flex gap-4 max-md:grid-cols-2 md:justify-between">
       <BinaryOptionAndNumberInput
         onChange={(binaryOption) => {
           if (binaryOption instanceof OverUnder) {
@@ -96,6 +99,10 @@ export function Child({ firebaseOptions, users, teams, lines }: ChildProps) {
           }}
           type={BinaryOptionType.HANDICAP}
         ></BinaryOptionAndNumberInput>
+
+        <BetAmountInput
+          onChange={(amount) => setBetAmount(amount)}
+        ></BetAmountInput>
       </div>
     </main>
   );
