@@ -47,7 +47,23 @@ export default function App() {
 }
 
 export function HydrateFallback() {
-  return <div>Loading...</div>;
+  return (
+    <div role="status" className="w-full p-8 animate-pulse">
+      <div className="h-64 w-full bg-gray-200 rounded-xl dark:bg-gray-700 mb-2.5"></div>
+      <div className="h-8 max-w-sm bg-gray-200 rounded-xl dark:bg-gray-700 mb-2.5"></div>
+      <div className="h-16 w-full bg-gray-200 rounded-xl dark:bg-gray-700 mb-2.5"></div>
+      <div className="h-8 max-w-sm bg-gray-200 rounded-xl dark:bg-gray-700 mb-2.5"></div>
+      <div className="h-32 w-full bg-gray-200 rounded-xl dark:bg-gray-700 mb-2.5"></div>
+      <div className="h-8 max-w-sm bg-gray-200 rounded-xl dark:bg-gray-700 mb-2.5"></div>
+      <div className="h-16 w-full bg-gray-200 rounded-xl dark:bg-gray-700 mb-2.5"></div>
+      <div className="h-max w-full max-sm:grid-cols-1 max-md:grid md:flex gap-4 max-md:grid-cols-2 md:justify-between">
+        <div className="h-16 w-64 bg-gray-200 rounded-xl dark:bg-gray-700"></div>
+        <div className="h-16 w-64 bg-gray-200 rounded-xl dark:bg-gray-700"></div>
+        <div className="h-16 w-64 bg-gray-200 rounded-xl dark:bg-gray-700"></div>
+      </div>
+      <span className="sr-only">Loading...</span>
+    </div>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
