@@ -1,4 +1,3 @@
-import { type FirebaseOptions } from "firebase/app";
 import { useState } from "react";
 import BinaryOptionAndNumberInput, {
   BinaryOptionType,
@@ -9,19 +8,32 @@ import type { Team } from "~/model/team";
 import type { User } from "~/model/user";
 import OptionContainer from "~/option-container/option-container";
 import BetAmountInput from "~/inputs/bet-amount-input";
+import BetSummary from "./bet-summary";
 
 type BetLogProps = {
-  firebaseOptions: FirebaseOptions;
   users: User[];
   teams: Team[];
   lines: Line[];
 };
 
-export function BetLog({ firebaseOptions, users, teams, lines }: BetLogProps) {
+export function BetLog({ users, teams, lines }: BetLogProps) {
+  const maps = [
+    { id: "mapMatch", name: "Match" },
+    { id: "map1", name: "Map 1" },
+    { id: "map2", name: "Map 2" },
+    { id: "map3", name: "Map 3" },
+    { id: "map4", name: "Map 4" },
+    { id: "map5", name: "Map 5" },
+  ];
+
   const userMap = new Map(users.map((user) => [user.id, user]));
+  const teamMap = new Map(teams.map((team) => [team.id, team]));
+  const mapMap = new Map(maps.map((map) => [map.id, map]));
+  const lineMap = new Map(lines.map((line) => [line.id, line]));
 
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [selectedTeamIds, setSelectedTeamIds] = useState<string[]>([]);
+  const [selectedMapId, setSelectedMapId] = useState<string>("");
   const [selectedLineId, setSelectedLineId] = useState<string>("");
 
   const [overUnder, setOverUnder] = useState<OverUnder>({
@@ -38,21 +50,43 @@ export function BetLog({ firebaseOptions, users, teams, lines }: BetLogProps) {
 
   return (
     <main className="flex-col p-8 space-y-4">
-      <div className="flex-col p-4 bg-blue-950 border-2 border-blue-300 rounded-xl w-full h-full">
-        <p>apiKey: {firebaseOptions.apiKey}</p>
-        <p>authDomain: {firebaseOptions.authDomain}</p>
-        <p>projectId: {firebaseOptions.projectId}</p>
-        <p>storageBucket: {firebaseOptions.storageBucket}</p>
-        <p>messagingSenderId: {firebaseOptions.messagingSenderId}</p>
-        <p>appId: {firebaseOptions.appId}</p>
-        <p>measurementId: {firebaseOptions.measurementId}</p>
-        <br></br>
-        {users.map((user, index) => (
-          <p key={index}>
-            id: {user.id} name: {user.name}
-          </p>
-        ))}
+      <div className="w-full h-max text-4xl font-semibold text-center">
+        gamba kappachungus deluxe
       </div>
+
+      <BetSummary
+        userA={
+          selectedUserIds.length > 0
+            ? userMap.get(selectedUserIds[0]) ?? null
+            : null
+        }
+        userB={
+          selectedUserIds.length > 1
+            ? userMap.get(selectedUserIds[1]) ?? null
+            : null
+        }
+        teamA={
+          selectedTeamIds.length > 0
+            ? teamMap.get(selectedTeamIds[0]) ?? null
+            : null
+        }
+        teamB={
+          selectedTeamIds.length > 1
+            ? teamMap.get(selectedTeamIds[1]) ?? null
+            : null
+        }
+        map={
+          selectedMapId.length > 0
+            ? mapMap.get(selectedMapId)?.name ?? null
+            : null
+        }
+        line={
+          selectedLineId.length > 0 ? lineMap.get(selectedLineId) ?? null : null
+        }
+        overUnder={overUnder}
+        handicap={handicap}
+        betAmount={betAmount}
+      ></BetSummary>
 
       <OptionContainer
         optionContainerName="Users"
@@ -69,6 +103,15 @@ export function BetLog({ firebaseOptions, users, teams, lines }: BetLogProps) {
         maxOptionsSelectable={2}
         onSelectionChange={(selectionOrder) => {
           setSelectedTeamIds(selectionOrder);
+        }}
+      ></OptionContainer>
+
+      <OptionContainer
+        optionContainerName="Map"
+        options={maps}
+        maxOptionsSelectable={1}
+        onSelectionChange={(selectionOrder) => {
+          setSelectedMapId(selectionOrder[0] || "");
         }}
       ></OptionContainer>
 
