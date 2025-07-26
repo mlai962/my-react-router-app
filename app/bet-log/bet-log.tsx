@@ -38,20 +38,8 @@ export function BetLog({ firebaseOptions, users, teams, lines }: BetLogProps) {
 
   return (
     <main className="flex-col p-8 space-y-4">
-      <div className="flex-col p-4 bg-blue-950 border-2 border-blue-300 rounded-xl w-full h-full">
-        <p>apiKey: {firebaseOptions.apiKey}</p>
-        <p>authDomain: {firebaseOptions.authDomain}</p>
-        <p>projectId: {firebaseOptions.projectId}</p>
-        <p>storageBucket: {firebaseOptions.storageBucket}</p>
-        <p>messagingSenderId: {firebaseOptions.messagingSenderId}</p>
-        <p>appId: {firebaseOptions.appId}</p>
-        <p>measurementId: {firebaseOptions.measurementId}</p>
-        <br></br>
-        {users.map((user, index) => (
-          <p key={index}>
-            id: {user.id} name: {user.name}
-          </p>
-        ))}
+      <div className="w-full h-max text-4xl font-semibold text-center">
+        gamba kappachungus deluxe
       </div>
 
       <OptionContainer
