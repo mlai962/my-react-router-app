@@ -8,6 +8,7 @@ import type { Team } from "~/model/team";
 import type { User } from "~/model/user";
 import OptionContainer from "~/option-container/option-container";
 import BetAmountInput from "~/inputs/bet-amount-input";
+import BetSummary from "./bet-summary";
 
 type BetLogProps = {
   users: User[];
@@ -52,6 +53,40 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
       <div className="w-full h-max text-4xl font-semibold text-center">
         gamba kappachungus deluxe
       </div>
+
+      <BetSummary
+        userA={
+          selectedUserIds.length > 0
+            ? userMap.get(selectedUserIds[0]) ?? null
+            : null
+        }
+        userB={
+          selectedUserIds.length > 1
+            ? userMap.get(selectedUserIds[1]) ?? null
+            : null
+        }
+        teamA={
+          selectedTeamIds.length > 0
+            ? teamMap.get(selectedTeamIds[0]) ?? null
+            : null
+        }
+        teamB={
+          selectedTeamIds.length > 1
+            ? teamMap.get(selectedTeamIds[1]) ?? null
+            : null
+        }
+        map={
+          selectedMapId.length > 0
+            ? mapMap.get(selectedMapId)?.name ?? null
+            : null
+        }
+        line={
+          selectedLineId.length > 0 ? lineMap.get(selectedLineId) ?? null : null
+        }
+        overUnder={overUnder}
+        handicap={handicap}
+        betAmount={betAmount}
+      ></BetSummary>
 
       <OptionContainer
         optionContainerName="Users"
