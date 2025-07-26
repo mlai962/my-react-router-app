@@ -1,4 +1,3 @@
-import { type FirebaseOptions } from "firebase/app";
 import { useState } from "react";
 import BinaryOptionAndNumberInput, {
   BinaryOptionType,
@@ -11,17 +10,29 @@ import OptionContainer from "~/option-container/option-container";
 import BetAmountInput from "~/inputs/bet-amount-input";
 
 type BetLogProps = {
-  firebaseOptions: FirebaseOptions;
   users: User[];
   teams: Team[];
   lines: Line[];
 };
 
-export function BetLog({ firebaseOptions, users, teams, lines }: BetLogProps) {
+export function BetLog({ users, teams, lines }: BetLogProps) {
+  const maps = [
+    { id: "mapMatch", name: "Match" },
+    { id: "map1", name: "Map 1" },
+    { id: "map2", name: "Map 2" },
+    { id: "map3", name: "Map 3" },
+    { id: "map4", name: "Map 4" },
+    { id: "map5", name: "Map 5" },
+  ];
+
   const userMap = new Map(users.map((user) => [user.id, user]));
+  const teamMap = new Map(teams.map((team) => [team.id, team]));
+  const mapMap = new Map(maps.map((map) => [map.id, map]));
+  const lineMap = new Map(lines.map((line) => [line.id, line]));
 
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [selectedTeamIds, setSelectedTeamIds] = useState<string[]>([]);
+  const [selectedMapId, setSelectedMapId] = useState<string>("");
   const [selectedLineId, setSelectedLineId] = useState<string>("");
 
   const [overUnder, setOverUnder] = useState<OverUnder>({
@@ -57,6 +68,15 @@ export function BetLog({ firebaseOptions, users, teams, lines }: BetLogProps) {
         maxOptionsSelectable={2}
         onSelectionChange={(selectionOrder) => {
           setSelectedTeamIds(selectionOrder);
+        }}
+      ></OptionContainer>
+
+      <OptionContainer
+        optionContainerName="Map"
+        options={maps}
+        maxOptionsSelectable={1}
+        onSelectionChange={(selectionOrder) => {
+          setSelectedMapId(selectionOrder[0] || "");
         }}
       ></OptionContainer>
 
