@@ -1,6 +1,6 @@
 import { collection, CollectionReference, getDocs } from "firebase/firestore";
 import { BetLog } from "~/bet-log/bet-log";
-import app, { db } from "~/firebase";
+import { db } from "~/firebase";
 import type { Route } from "./+types/bet-log-route";
 import type { User } from "~/model/user";
 import type { Team } from "~/model/team";
@@ -38,12 +38,5 @@ export async function clientLoader() {
 export default function BetLogRoute({ loaderData }: Route.ComponentProps) {
   const { users, teams, lines } = loaderData;
 
-  return (
-    <BetLog
-      firebaseOptions={app.options}
-      users={users}
-      teams={teams}
-      lines={lines}
-    />
-  );
+  return <BetLog users={users} teams={teams} lines={lines} />;
 }
