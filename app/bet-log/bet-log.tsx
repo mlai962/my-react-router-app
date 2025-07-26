@@ -9,14 +9,16 @@ import type { User } from "~/model/user";
 import OptionContainer from "~/option-container/option-container";
 import BetAmountInput from "~/inputs/bet-amount-input";
 import BetSummary from "./bet-summary";
+import type { Bet } from "~/model/bet";
 
 type BetLogProps = {
   users: User[];
   teams: Team[];
   lines: Line[];
+  bets: Bet[];
 };
 
-export function BetLog({ users, teams, lines }: BetLogProps) {
+export function BetLog({ users, teams, lines, bets }: BetLogProps) {
   const maps = [
     { id: "mapMatch", name: "Match" },
     { id: "map1", name: "Map 1" },
