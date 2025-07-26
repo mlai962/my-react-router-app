@@ -19,6 +19,8 @@ export type BetDto = BaseFirebaseDocument & {
   extras: Map<string, any>;
   betAmount: number;
   date: Timestamp;
+  odds: number;
+  winner: string;
 };
 
 export class Bet {
@@ -32,6 +34,8 @@ export class Bet {
   public readonly extras: Map<string, any>;
   public readonly betAmount: number;
   public readonly date: Timestamp;
+  public readonly odds: number;
+  public readonly winner: string;
 
   constructor(
     dto: BetDto,
@@ -73,5 +77,7 @@ export class Bet {
     this.extras = dto.extras;
     this.betAmount = dto.betAmount;
     this.date = dto.date;
+    this.odds = dto.odds;
+    this.winner = dto.winner;
   }
 }
