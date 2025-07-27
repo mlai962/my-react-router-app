@@ -51,6 +51,8 @@ export function BetLog({ users, teams, lines, bets }: BetLogProps) {
 
   const [betAmount, setBetAmount] = useState<number>(0);
 
+  const handleBetSubmit = () => {};
+
   return (
     <main className="flex-col p-8 space-y-4">
       <div className="w-full h-max text-4xl font-semibold text-center">
@@ -151,6 +153,19 @@ export function BetLog({ users, teams, lines, bets }: BetLogProps) {
           placeholder="bet amount..."
           svgPath="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2"
         ></NumberInput>
+
+        <button
+          type="button"
+          onClick={() => handleBetSubmit()}
+          className="w-[258px] h-[82px] rounded-lg border-1 text-purple-200
+            bg-gray-400 dark:bg-purple-950/10
+            border-purple-500 dark:border-purple-700
+            hover:bg-purple-200 dark:hover:bg-purple-600
+            active:bg-purple-300 dark:active:bg-purple-500
+            hover:cursor-pointer hover:disabled:cursor-not-allowed"
+        >
+          submit gamba
+        </button>
       </div>
 
       <BetHistory initialBets={bets}></BetHistory>
