@@ -10,6 +10,7 @@ import OptionContainer from "~/option-container/option-container";
 import BetAmountInput from "~/inputs/bet-amount-input";
 import BetSummary from "./bet-summary";
 import type { Bet } from "~/model/bet";
+import BetHistory from "./bet-history";
 
 type BetLogProps = {
   users: User[];
@@ -149,6 +150,8 @@ export function BetLog({ users, teams, lines, bets }: BetLogProps) {
           onChange={(amount) => setBetAmount(amount)}
         ></BetAmountInput>
       </div>
+
+      <BetHistory initialBets={bets}></BetHistory>
     </main>
   );
 }
