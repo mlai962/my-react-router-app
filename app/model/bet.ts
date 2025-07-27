@@ -31,7 +31,7 @@ export class Bet {
   public readonly teamB: Team;
   public readonly line: Line;
   public readonly map: string;
-  public readonly extras: Map<string, any>;
+  public readonly extras: Record<string, any>;
   public readonly betAmount: number;
   public readonly date: Timestamp;
   public readonly odds: number;
@@ -74,7 +74,7 @@ export class Bet {
     };
 
     this.map = dto.map;
-    this.extras = dto.extras;
+    this.extras = dto.extras as Record<string, any>;
     this.betAmount = dto.betAmount;
     this.date = dto.date;
     this.odds = dto.odds;
