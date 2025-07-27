@@ -127,7 +127,7 @@ export function BetLog({ users, teams, lines, bets }: BetLogProps) {
         }}
       ></OptionContainer>
 
-      <div className="max-sm:grid-cols-1 max-md:grid md:flex gap-4 max-md:grid-cols-2 md:justify-between">
+      <div className="flex flex-wrap justify-between gap-2">
         <BinaryOptionAndNumberInput
           onChange={(binaryOption) => {
             if (binaryOption instanceof OverUnder) {
