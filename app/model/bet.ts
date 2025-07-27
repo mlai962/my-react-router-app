@@ -9,6 +9,9 @@ import type { User } from "./user";
 import type { Team } from "./team";
 import type { Line } from "./line";
 
+export const EXTRA_BINARY_LINE_OPTION: string = "binaryLineOption"; // boolean
+export const EXTRA_BINARY_LINE_VALUE: string = "binaryLineValue"; // number
+
 export type BetDto = BaseFirebaseDocument & {
   userA: DocumentReference<User>;
   userB: DocumentReference<User>;
@@ -35,7 +38,7 @@ export class Bet {
   public readonly betAmount: number;
   public readonly date: Timestamp;
   public readonly odds: number;
-  public readonly winner: string;
+  public winner: string;
 
   constructor(
     dto: BetDto,
