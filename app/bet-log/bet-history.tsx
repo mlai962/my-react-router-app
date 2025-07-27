@@ -45,7 +45,7 @@ export default function BetHistory({ initialBets }: BetHistoryProps) {
         return (
           <div
             key={bet.id}
-            className="w-full h-max grid grid-cols-1 md:grid-cols-3 rounded-lg p-2 border-1 
+            className="w-full h-max grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 rounded-lg p-2 border-1 
             text-purple-200
             bg-gray-400 dark:bg-purple-950/10
             border-purple-500 dark:border-purple-700"
