@@ -12,6 +12,7 @@ type BetSummaryProps = {
   map: string | null;
   overUnder: OverUnder;
   handicap: Handicap;
+  odds: number | null;
   betAmount: number | null;
 };
 
@@ -24,6 +25,7 @@ export default function BetSummary({
   map,
   overUnder,
   handicap,
+  odds,
   betAmount,
 }: BetSummaryProps) {
   return (
@@ -51,6 +53,7 @@ export default function BetSummary({
         {line && line.lineType == LineType.HANDICAP && handicap
           ? (handicap.plus ? "+" : "-") + handicap.value
           : ""}{" "}
+        {odds ? "@" + odds.toFixed(2) + "x " : ""}
         {betAmount ? "$" + betAmount : ""}
       </div>
     </div>

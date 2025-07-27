@@ -91,6 +91,7 @@ export function BetLog({ users, teams, lines, bets }: BetLogProps) {
         }
         overUnder={overUnder}
         handicap={handicap}
+        odds={odds}
         betAmount={betAmount}
       ></BetSummary>
 
