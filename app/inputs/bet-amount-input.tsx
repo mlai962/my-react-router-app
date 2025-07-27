@@ -4,7 +4,7 @@ type BetAmountInputProps = {
   svgPath: string;
 };
 
-export default function BetAmountInput({
+export default function NumberInput({
   onChange,
   placeholder,
   svgPath,

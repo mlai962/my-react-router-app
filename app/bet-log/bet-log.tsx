@@ -7,7 +7,7 @@ import { Handicap, OverUnder } from "~/model/binary-option-and-number";
 import type { Team } from "~/model/team";
 import type { User } from "~/model/user";
 import OptionContainer from "~/option-container/option-container";
-import BetAmountInput from "~/inputs/bet-amount-input";
+import NumberInput from "~/inputs/bet-amount-input";
 import BetSummary from "./bet-summary";
 import type { Bet } from "~/model/bet";
 import BetHistory from "./bet-history";
@@ -146,11 +146,11 @@ export function BetLog({ users, teams, lines, bets }: BetLogProps) {
           type={BinaryOptionType.HANDICAP}
         ></BinaryOptionAndNumberInput>
 
-        <BetAmountInput
+        <NumberInput
           onChange={(amount) => setBetAmount(amount)}
           placeholder="bet amount..."
           svgPath="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2"
-        ></BetAmountInput>
+        ></NumberInput>
       </div>
 
       <BetHistory initialBets={bets}></BetHistory>
