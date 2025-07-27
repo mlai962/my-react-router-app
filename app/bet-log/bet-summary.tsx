@@ -36,16 +36,20 @@ export default function BetSummary({
     >
       <div className="w-full h-48 flex font-bold text-center items-center">
         <div className="w-5/12 h-full">
-          <div className="w-full h-3/4 text-9xl">{teamA ? teamA.name : ""}</div>
+          <div className="w-full h-3/4 max-sm:text-7xl text-9xl">
+            {teamA ? teamA.name : ""}
+          </div>
           <div className="w-full h-1/4 text-2xl">{userA ? userA.name : ""}</div>
         </div>
         <div className="w-2/12">{"vs"}</div>
         <div className="w-5/12 h-full">
-          <div className="w-full h-3/4 text-9xl">{teamB ? teamB.name : ""}</div>
+          <div className="w-full h-3/4 max-sm:text-7xl text-9xl">
+            {teamB ? teamB.name : ""}
+          </div>
           <div className="w-full h-1/4 text-2xl">{userB ? userB.name : ""}</div>
         </div>
       </div>
-      <div className="w-full h-16 font-bold text-center items-center text-2xl">
+      <div className="w-full h-16 font-bold text-center items-center max-sm:text-xl text-2xl">
         {map ? map : ""} {line ? line.name : ""}{" "}
         {line && line.lineType == LineType.OVER_UNDER && overUnder
           ? (overUnder.over ? "o" : "u") + overUnder.value
