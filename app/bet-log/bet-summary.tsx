@@ -12,7 +12,9 @@ type BetSummaryProps = {
   map: string | null;
   overUnder: OverUnder;
   handicap: Handicap;
+  odds: number | null;
   betAmount: number | null;
+  date: string;
 };
 
 export default function BetSummary({
@@ -24,7 +26,9 @@ export default function BetSummary({
   map,
   overUnder,
   handicap,
+  odds,
   betAmount,
+  date,
 }: BetSummaryProps) {
   return (
     <div
@@ -34,23 +38,28 @@ export default function BetSummary({
     >
       <div className="w-full h-48 flex font-bold text-center items-center">
         <div className="w-5/12 h-full">
-          <div className="w-full h-3/4 text-9xl">{teamA ? teamA.name : ""}</div>
+          <div className="w-full h-3/4 truncate max-sm:text-7xl text-9xl">
+            {teamA ? teamA.name : ""}
+          </div>
           <div className="w-full h-1/4 text-2xl">{userA ? userA.name : ""}</div>
         </div>
         <div className="w-2/12">{"vs"}</div>
         <div className="w-5/12 h-full">
-          <div className="w-full h-3/4 text-9xl">{teamB ? teamB.name : ""}</div>
+          <div className="w-full h-3/4 truncate max-sm:text-7xl text-9xl">
+            {teamB ? teamB.name : ""}
+          </div>
           <div className="w-full h-1/4 text-2xl">{userB ? userB.name : ""}</div>
         </div>
       </div>
-      <div className="w-full h-16 font-bold text-center items-center text-2xl">
-        {map ? map : ""} {line ? line.name : ""}{" "}
+      <div className="w-full h-16 font-bold text-center items-center max-sm:text-xl text-2xl">
+        {date} {map ? map : ""} {line ? line.name : ""}{" "}
         {line && line.lineType == LineType.OVER_UNDER && overUnder
           ? (overUnder.over ? "o" : "u") + overUnder.value
           : ""}{" "}
         {line && line.lineType == LineType.HANDICAP && handicap
           ? (handicap.plus ? "+" : "-") + handicap.value
           : ""}{" "}
+        {odds ? "@" + odds.toFixed(2) + "x " : ""}
         {betAmount ? "$" + betAmount : ""}
       </div>
     </div>
