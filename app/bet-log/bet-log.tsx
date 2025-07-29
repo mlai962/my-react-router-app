@@ -95,6 +95,8 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
   const [selectedMapId, setSelectedMapId] = useState<string>("");
   const [selectedLineId, setSelectedLineId] = useState<string>("");
 
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+
   const [overUnder, setOverUnder] = useState<OverUnder>({
     over: true,
     value: 0.5,
@@ -149,6 +151,7 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         handicap={handicap}
         odds={odds}
         betAmount={betAmount}
+        date={date}
       ></BetSummary>
 
       <OptionContainer
@@ -188,6 +191,19 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
       ></OptionContainer>
 
       <div className="flex flex-wrap justify-between gap-2">
+        <div
+          className="w-[258px] h-[82px] p-2 rounded-lg border-1 text-purple-200
+            bg-gray-400 dark:bg-purple-950/10
+            border-purple-500 dark:border-purple-700"
+        >
+          <input
+            type="date"
+            value={date}
+            className="w-full h-full focus:outline-none"
+            onChange={(e) => setDate(e.target.value)}
+          ></input>
+        </div>
+
         <BinaryOptionAndNumberInput
           onChange={(binaryOption) => {
             if (binaryOption instanceof OverUnder) {
