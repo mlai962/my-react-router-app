@@ -311,6 +311,16 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         </button>
       </div>
 
+      <div className="w-full space-y-1">
+        <div className="w-full text-3xl font-semibold text-center">{`vs Campbell [${
+          balanceCampbell < 0 ? "-" : "+"
+        }$${balanceCampbell < 0 ? -balanceCampbell : balanceCampbell}]`}</div>
+
+        <div className="w-full text-3xl font-semibold text-center">{`vs Jungwoo [${
+          balanceJungwoo < 0 ? "-" : "+"
+        }$${balanceJungwoo < 0 ? -balanceJungwoo : balanceJungwoo}]`}</div>
+      </div>
+
       <BetHistory
         bets={bets}
         handleBetSettlement={handleBetSettlement}
@@ -318,3 +328,31 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
     </main>
   );
 }
+
+const calculateBalance = (userName: string, bets: Bet[]) => {
+  return bets.reduce((total, bet) => {
+    var multiplier: number;
+
+    if (bet.odds == 1.33) {
+      multiplier = 4 / 3;
+    } else if (bet.odds == 1.66) {
+      multiplier = 5 / 3;
+    } else {
+      multiplier = bet.odds;
+    }
+
+    console.log(bet.betAmount * (multiplier - 1), total);
+
+    if (bet.userA.name === userName && bet.winner === "userA") {
+      return total - bet.betAmount * (multiplier - 1);
+    } else if (bet.userA.name === userName && bet.winner === "userB") {
+      return total + bet.betAmount;
+    } else if (bet.userB.name === userName && bet.winner === "userA") {
+      return total + bet.betAmount * (multiplier - 1);
+    } else if (bet.userB.name === userName && bet.winner === "userB") {
+      return total - bet.betAmount;
+    }
+
+    return total;
+  }, 0.0);
+};
