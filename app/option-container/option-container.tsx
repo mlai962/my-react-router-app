@@ -60,17 +60,19 @@ export default function OptionContainer({
             bg-gray-400 dark:bg-purple-950/10
             border-purple-500 dark:border-purple-700"
       >
-        {options.map((option) => (
-          <Option
-            key={option.id}
-            id={option.id}
-            name={option.name}
-            selected={selectedIds.includes(option.id)}
-            onClick={(id) => {
-              handleClick(id);
-            }}
-          />
-        ))}
+        {options
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((option) => (
+            <Option
+              key={option.id}
+              id={option.id}
+              name={option.name}
+              selected={selectedIds.includes(option.id)}
+              onClick={(id) => {
+                handleClick(id);
+              }}
+            />
+          ))}
       </div>
     </div>
   );
