@@ -19,7 +19,7 @@ export type BetDto = BaseFirebaseDocument & {
   teamB: DocumentReference<Team>;
   line: DocumentReference<Line>;
   map: string;
-  extras: Map<string, any>;
+  extras: Record<string, any>;
   betAmount: number;
   date: Timestamp;
   odds: number;
