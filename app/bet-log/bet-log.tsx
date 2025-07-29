@@ -1,25 +1,81 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BinaryOptionAndNumberInput, {
   BinaryOptionType,
 } from "~/inputs/binary-option-and-number-input";
-import type { Line } from "~/model/line";
+import { LineType, type Line } from "~/model/line";
 import { Handicap, OverUnder } from "~/model/binary-option-and-number";
 import type { Team } from "~/model/team";
 import type { User } from "~/model/user";
 import OptionContainer from "~/option-container/option-container";
 import NumberInput from "~/inputs/bet-amount-input";
 import BetSummary from "./bet-summary";
-import type { Bet } from "~/model/bet";
+import {
+  Bet,
+  EXTRA_BINARY_LINE_OPTION,
+  EXTRA_BINARY_LINE_VALUE,
+  type BetDto,
+} from "~/model/bet";
 import BetHistory from "./bet-history";
+import {
+  addDoc,
+  collection,
+  CollectionReference,
+  doc,
+  DocumentReference,
+  getDoc,
+  onSnapshot,
+  Timestamp,
+  updateDoc,
+  type DocumentData,
+} from "firebase/firestore";
+import { db } from "~/firebase";
 
 type BetLogProps = {
   users: User[];
   teams: Team[];
   lines: Line[];
-  bets: Bet[];
 };
 
-export function BetLog({ users, teams, lines, bets }: BetLogProps) {
+export function BetLog({ users, teams, lines }: BetLogProps) {
+  const [bets, setBets] = useState<Bet[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, "bets") as CollectionReference<BetDto>,
+      async (snapshot) => {
+        const bets = await Promise.all(
+          snapshot.docs.map(async (doc) => {
+            const docData = doc.data();
+
+            const userA = await getDoc(docData.userA);
+            const userB = await getDoc(docData.userB);
+            const teamA = await getDoc(docData.teamA);
+            const teamB = await getDoc(docData.teamB);
+            const line = await getDoc(docData.line);
+
+            return new Bet(docData, doc.id, userA, userB, teamA, teamB, line);
+          })
+        );
+
+        setBets(
+          [...bets].sort((a, b) => b.date.toMillis() - a.date.toMillis())
+        );
+
+        console.log(bets);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
+
+  const [balanceCampbell, setBalanceCampbell] = useState(0);
+  const [balanceJungwoo, setBalanceJungwoo] = useState(0);
+
+  useEffect(() => {
+    setBalanceCampbell(calculateBalance("Campbell", bets));
+    setBalanceJungwoo(calculateBalance("Jungwoo", bets));
+  }, [bets]);
+
   const maps = [
     { id: "mapMatch", name: "Match" },
     { id: "map1", name: "Map 1" },
