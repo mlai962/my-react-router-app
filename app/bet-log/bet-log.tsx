@@ -110,6 +110,52 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
   const [odds, setOdds] = useState<number>(0);
   const [betAmount, setBetAmount] = useState<number>(0);
 
+  const handleBetSubmit = async () => {
+    if (selectedUserIds.length < 2) return;
+    if (selectedTeamIds.length < 2) return;
+    if (selectedMapId.length === 0) return;
+    if (selectedLineId.length === 0) return;
+    if (odds <= 0) return;
+    if (betAmount <= 0) return;
+
+    await addDoc(collection(db, "bets"), {
+      userA: doc(db, "users", selectedUserIds[0]) as DocumentReference<
+        User,
+        DocumentData
+      >,
+      userB: doc(db, "users", selectedUserIds[1]) as DocumentReference<
+        User,
+        DocumentData
+      >,
+      teamA: doc(db, " teams", selectedTeamIds[0]) as DocumentReference<
+        Team,
+        DocumentData
+      >,
+      teamB: doc(db, " teams", selectedTeamIds[1]) as DocumentReference<
+        Team,
+        DocumentData
+      >,
+      line: doc(db, "lines", selectedLineId) as DocumentReference<
+        Line,
+        DocumentData
+      >,
+      map: mapMap.get(selectedMapId)?.name!,
+      extras: {
+        [EXTRA_BINARY_LINE_OPTION]:
+          lineMap.get(selectedLineId)?.lineType === LineType.OVER_UNDER
+            ? overUnder.over
+            : handicap.plus,
+        [EXTRA_BINARY_LINE_VALUE]:
+          lineMap.get(selectedLineId)?.lineType === LineType.OVER_UNDER
+            ? overUnder.value
+            : handicap.value,
+      },
+      betAmount: betAmount,
+      date: Timestamp.fromDate(new Date(date)),
+      odds: odds,
+      winner: "",
+    });
+  };
 
   const handleBetSettlement = async (betId: string, winner: string) => {
     const betRef = doc(db, "bets", betId);
