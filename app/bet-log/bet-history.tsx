@@ -35,7 +35,7 @@ export default function BetHistory({ initialBets }: BetHistoryProps) {
   };
 
   return (
-    <div className="w-full h-max">
+    <div className="w-full h-max space-y-1">
       {bets.map((bet) => {
         const binaryLineOption: boolean =
           bet.extras[EXTRA_BINARY_LINE_OPTION] ?? true;
