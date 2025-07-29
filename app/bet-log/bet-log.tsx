@@ -110,7 +110,24 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
   const [odds, setOdds] = useState<number>(0);
   const [betAmount, setBetAmount] = useState<number>(0);
 
-  const handleBetSubmit = () => {};
+
+  const handleBetSettlement = async (betId: string, winner: string) => {
+    const betRef = doc(db, "bets", betId);
+
+    try {
+      await updateDoc(betRef, {
+        winner: winner,
+      });
+
+      const updated = bets.map((bet) =>
+        bet.id === betId ? { ...bet, winner: winner } : bet
+      );
+
+      setBets(updated);
+    } catch (error) {
+      console.error("Error updating document:", error);
+    }
+  };
 
   return (
     <main className="flex-col p-8 space-y-4">
@@ -248,7 +265,10 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         </button>
       </div>
 
-      <BetHistory initialBets={bets}></BetHistory>
+      <BetHistory
+        bets={bets}
+        handleBetSettlement={handleBetSettlement}
+      ></BetHistory>
     </main>
   );
 }
