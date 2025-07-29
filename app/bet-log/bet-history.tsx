@@ -79,8 +79,8 @@ export default function BetHistory({ initialBets }: BetHistoryProps) {
                   id={"radio-unsettled-" + bet.id}
                   type="radio"
                   value=""
-                  name="settle-bet-radio-group"
-                  checked={bet.winner === ""}
+                  name={"settle-bet-radio-group" + bet.id}
+                  checked={bet.winner.length === 0}
                   onChange={(e) => handleBetSettlement(bet.id, e.target.value)}
                   className="w-4 h-4 me-1 
                     accent-purple-800 dark:accent-purple-600
@@ -96,7 +96,7 @@ export default function BetHistory({ initialBets }: BetHistoryProps) {
                   id={"radio-userA-" + bet.id}
                   type="radio"
                   value="userA"
-                  name="settle-bet-radio-group"
+                  name={"settle-bet-radio-group" + bet.id}
                   checked={bet.winner === "userA"}
                   onChange={(e) => handleBetSettlement(bet.id, e.target.value)}
                   className="w-4 h-4 me-1 
@@ -113,7 +113,7 @@ export default function BetHistory({ initialBets }: BetHistoryProps) {
                   id={"radio-userB-" + bet.id}
                   type="radio"
                   value="userB"
-                  name="settle-bet-radio-group"
+                  name={"settle-bet-radio-group" + bet.id}
                   checked={bet.winner === "userB"}
                   onChange={(e) => handleBetSettlement(bet.id, e.target.value)}
                   className="w-4 h-4 me-1 
