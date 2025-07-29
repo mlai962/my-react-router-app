@@ -1,4 +1,4 @@
-import { doc, updateDoc } from "firebase/firestore";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "~/firebase";
 import {
@@ -9,30 +9,15 @@ import {
 import { LineType } from "~/model/line";
 
 type BetHistoryProps = {
-  initialBets: Bet[];
+  bets: Bet[];
+  handleBetSettlement: (betId: string, winner: string) => void;
 };
 
-export default function BetHistory({ initialBets }: BetHistoryProps) {
-  const [bets, setBets] = useState(initialBets);
-  const betMap = new Map(initialBets.map((bet) => [bet.id, bet]));
-
-  const handleBetSettlement = async (betId: string, winner: string) => {
-    const betRef = doc(db, "bets", betId);
-
-    try {
-      await updateDoc(betRef, {
-        winner: winner,
-      });
-
-      const updated = bets.map((bet) =>
-        bet.id === betId ? { ...bet, winner: winner } : bet
-      );
-
-      setBets(updated);
-    } catch (error) {
-      console.error("Error updating document:", error);
-    }
-  };
+export default function BetHistory({
+  bets,
+  handleBetSettlement,
+}: BetHistoryProps) {
+  const betMap = new Map(bets.map((bet) => [bet.id, bet]));
 
   return (
     <div className="w-full h-max space-y-1">
