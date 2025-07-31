@@ -73,8 +73,6 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         setBets(
           [...bets].sort((a, b) => b.date.toMillis() - a.date.toMillis())
         );
-
-        console.log(bets);
       }
     );
 
@@ -411,8 +409,6 @@ const calculateBalance = (userName: string, bets: Bet[]) => {
     } else {
       multiplier = bet.odds;
     }
-
-    console.log(bet.betAmount * (multiplier - 1), total);
 
     if (bet.userA.name === userName && bet.winner === "userA") {
       return total - bet.betAmount * (multiplier - 1);
