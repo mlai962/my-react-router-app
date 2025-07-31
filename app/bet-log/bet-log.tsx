@@ -178,7 +178,12 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
 
   const [isAddOptionModalOpen, setIsAddOptionModalOpen] =
     useState<boolean>(false);
+  const [
+    addOptionModalOptionContainerName,
+    setAddOptionModalOptionContainerName,
+  ] = useState<string>("");
   const handleOnAddOptionClick = (optionContainerName: string) => {
+    setAddOptionModalOptionContainerName(optionContainerName);
     setIsAddOptionModalOpen(true);
   };
 
@@ -188,7 +193,15 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         isOpen={isAddOptionModalOpen}
         onClose={() => setIsAddOptionModalOpen(false)}
       >
-        modal test
+        <div className="w-full h-full items-center justify-center">
+          <div className="w-max m-auto text-white text-xl">
+            Add a new option to the{" "}
+            <span className="font-bold">
+              {addOptionModalOptionContainerName}
+            </span>{" "}
+            list
+          </div>
+        </div>
       </Modal>
 
       <div className="w-full h-max text-4xl font-semibold text-center">

@@ -38,7 +38,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
         onClick={stopPropagation}
       >
         <button
-          className="absolute top-1 right-3 text-xl text-white cursor-pointer"
+          className="absolute top-0 right-2 text-xl text-white cursor-pointer"
           onClick={onClose}
           aria-label="Close modal"
         >
