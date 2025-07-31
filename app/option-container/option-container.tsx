@@ -15,7 +15,7 @@ type OptionContainerProps = {
    */
   onSelectionChange: (selectionOrder: string[]) => void;
 
-  onAddOptionClick: (optionContainerName: string) => void;
+  onAddOptionClick?: (optionContainerName: string) => void;
 };
 
 export default function OptionContainer({
@@ -66,28 +66,50 @@ export default function OptionContainer({
             border-purple-500 dark:border-purple-700"
       >
         {options
-          .sort((a, b) => a.name.localeCompare(b.name))
+          ?.sort((a, b) => a.name.localeCompare(b.name))
           .map((option) => (
             <Option
               key={option.id}
               id={option.id}
-              name={option.name}
               selected={selectedIds.includes(option.id)}
               onClick={(id) => {
                 handleClick(id);
               }}
-            />
+            >
+              {option.name}
+            </Option>
           ))}
 
-        <Option
-          key={`add-new-option-${optionContainerName}`}
-          id={`add-new-option-${optionContainerName}`}
-          name={`+`}
-          selected={false}
-          onClick={() => {
-            onAddOptionClick(optionContainerName);
-          }}
-        />
+        {onAddOptionClick ? (
+          <Option
+            key={`add-new-option-${optionContainerName}`}
+            id={`add-new-option-${optionContainerName}`}
+            selected={false}
+            onClick={() => {
+              if (onAddOptionClick) onAddOptionClick(optionContainerName);
+            }}
+          >
+            <svg
+              className="w-6 h-6 text-gray-800 dark:text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+          </Option>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

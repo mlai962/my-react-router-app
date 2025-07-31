@@ -1,11 +1,13 @@
+import type { ReactNode } from "react";
+
 type OptionProps = {
   id: string;
-  name: string;
   selected?: boolean;
   onClick: (id: string) => void;
+  children: ReactNode;
 };
 
-export default function Option({ id, name, selected, onClick }: OptionProps) {
+const Option: React.FC<OptionProps> = ({ id, selected, onClick, children }) => {
   return (
     <button type="button" onClick={() => onClick(id)}>
       <div
@@ -21,9 +23,11 @@ export default function Option({ id, name, selected, onClick }: OptionProps) {
         `}
       >
         <p className={`text-base ${selected ? "font-bold" : "font-normal"}`}>
-          {name}
+          {children}
         </p>
       </div>
     </button>
   );
-}
+};
+
+export default Option;
