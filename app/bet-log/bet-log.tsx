@@ -180,9 +180,46 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
     addOptionModalOptionContainerName,
     setAddOptionModalOptionContainerName,
   ] = useState<string>("");
+  const [newOptionName, setNewOptionName] = useState<string>("");
+  const [newLineType, setNewLineType] = useState<LineType>(LineType.NONE);
   const handleOnAddOptionClick = (optionContainerName: string) => {
     setAddOptionModalOptionContainerName(optionContainerName);
+    setNewOptionName("");
+
     setIsAddOptionModalOpen(true);
+  };
+  const handleAddNewOption = async () => {
+    setIsAddOptionModalOpen(false);
+
+    const collectionName =
+      addOptionModalOptionContainerName === "Teams"
+        ? " teams"
+        : addOptionModalOptionContainerName.toLowerCase();
+
+    if (collectionName === "Maps") {
+      setMaps((prev) => [
+        ...prev,
+        { id: `newOptionName-${Date.now()}`, name: newOptionName },
+      ]);
+    } else {
+      const newOption = {
+        name: newOptionName,
+        ...(collectionName === "lines" && { lineType: newLineType }),
+      };
+
+      const docRef = await addDoc(collection(db, collectionName), newOption);
+
+      if (collectionName === "users") {
+        setUsers((prev) => [...prev, { ...newOption, id: docRef.id }]);
+      } else if (collectionName === " teams") {
+        setTeams((prev) => [...prev, { ...newOption, id: docRef.id }]);
+      } else if (collectionName === "lines") {
+        setLines((prev) => [
+          ...prev,
+          { name: newOptionName, lineType: newLineType, id: docRef.id },
+        ]);
+      }
+    }
   };
 
   return (
@@ -202,30 +239,88 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
 
           <div
             className="flex w-full h-14 rounded-lg gap-2 p-2 border-1 items-center
-            bg-gray-400 dark:bg-purple-950/10
-            border-purple-500 dark:border-purple-700
-              hover:disabled:cursor-not-allowed
+              bg-gray-400 dark:bg-purple-950/10
+              border-purple-500 dark:border-purple-700
               focus:outline-none"
           >
             <input
-              className="w-full h-8 focus:outline-none text-xl font-semibold"
+              className="w-full h-8 focus:outline-none text-xl text-center font-semibold"
               type="text"
               placeholder="New option name..."
               onChange={(e) => {
-                const raw = e.target.value;
+                setNewOptionName(e.target.value);
               }}
             />
           </div>
+
+          {addOptionModalOptionContainerName === "Lines" ? (
+            <div className="w-full flex justify-between">
+              <button
+                className={`w-16 h-16 rounded-lg border-1
+                  border-purple-500 dark:border-purple-700
+                  hover:bg-purple-200 dark:hover:bg-purple-600
+                  active:bg-purple-300 dark:active:bg-purple-500
+                  hover:cursor-pointer hover:disabled:cursor-not-allowed
+                  ${
+                    newLineType === LineType.NONE
+                      ? "bg-purple-300 dark:bg-purple-500/75"
+                      : "bg-gray-400 dark:bg-purple-700/50"
+                  }
+                `}
+                onClick={() => {
+                  setNewLineType(LineType.NONE);
+                }}
+              >
+                N/A
+              </button>
+              <button
+                className={`w-16 h-16 rounded-lg border-1
+                  border-purple-500 dark:border-purple-700
+                  hover:bg-purple-200 dark:hover:bg-purple-600
+                  active:bg-purple-300 dark:active:bg-purple-500
+                  hover:cursor-pointer hover:disabled:cursor-not-allowed
+                    ${
+                      newLineType === LineType.OVER_UNDER
+                        ? "bg-purple-300 dark:bg-purple-500/75"
+                        : "bg-gray-400 dark:bg-purple-700/50"
+                    }
+                `}
+                onClick={() => {
+                  setNewLineType(LineType.OVER_UNDER);
+                }}
+              >
+                O/U
+              </button>
+              <button
+                className={`w-16 h-16 rounded-lg border-1
+                  border-purple-500 dark:border-purple-700
+                  hover:bg-purple-200 dark:hover:bg-purple-600
+                  active:bg-purple-300 dark:active:bg-purple-500
+                  hover:cursor-pointer hover:disabled:cursor-not-allowed
+                    ${
+                      newLineType === LineType.HANDICAP
+                        ? "bg-purple-300 dark:bg-purple-500/75"
+                        : "bg-gray-400 dark:bg-purple-700/50"
+                    }
+                `}
+                onClick={() => {
+                  setNewLineType(LineType.HANDICAP);
+                }}
+              >
+                +/-
+              </button>
+            </div>
+          ) : (
+            <></>
+          )}
 
           <button
             className="flex w-full h-14 rounded-lg gap-2 p-2 border-1 items-center justify-center text-2xl font-bold
               bg-gray-400 dark:bg-purple-950/10
               border-purple-500 dark:border-purple-700
-              hover:bg-purple-200 dark:hover:bg-purple-600
-              active:bg-purple-300 dark:active:bg-purple-500
-              hover:disabled:cursor-not-allowed cursor-pointer
-              focus:outline-none"
-            onClick={() => setIsAddOptionModalOpen(false)}
+              hover:bg-purple-200 dark:hover:bg-purple-600\
+              cursor-pointer focus:outline-none"
+            onClick={() => handleAddNewOption()}
           >
             Submit
           </button>
