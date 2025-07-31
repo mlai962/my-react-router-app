@@ -175,6 +175,8 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
     }
   };
 
+  const handleOnAddOptionClick = (optionContainerName: string) => {};
+
   return (
     <main className="flex-col p-8 space-y-4">
       <div className="w-full h-max text-4xl font-semibold text-center">
@@ -224,6 +226,9 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         onSelectionChange={(selectionOrder) => {
           setSelectedUserIds(selectionOrder);
         }}
+        onAddOptionClick={(optionContainerName) =>
+          handleOnAddOptionClick(optionContainerName)
+        }
       ></OptionContainer>
 
       <OptionContainer
@@ -233,6 +238,9 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         onSelectionChange={(selectionOrder) => {
           setSelectedTeamIds(selectionOrder);
         }}
+        onAddOptionClick={(optionContainerName) =>
+          handleOnAddOptionClick(optionContainerName)
+        }
       ></OptionContainer>
 
       <OptionContainer
@@ -242,6 +250,9 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         onSelectionChange={(selectionOrder) => {
           setSelectedMapId(selectionOrder[0] || "");
         }}
+        onAddOptionClick={(optionContainerName) =>
+          handleOnAddOptionClick(optionContainerName)
+        }
       ></OptionContainer>
 
       <OptionContainer
@@ -251,6 +262,9 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         onSelectionChange={(selectionOrder) => {
           setSelectedLineId(selectionOrder[0] || "");
         }}
+        onAddOptionClick={(optionContainerName) =>
+          handleOnAddOptionClick(optionContainerName)
+        }
       ></OptionContainer>
 
       <div className="flex flex-wrap justify-between gap-2">

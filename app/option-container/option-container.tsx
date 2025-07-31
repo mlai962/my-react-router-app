@@ -14,6 +14,8 @@ type OptionContainerProps = {
    * Receives an array of IDs ordered from least-recently-used → most-recently-used.
    */
   onSelectionChange: (selectionOrder: string[]) => void;
+
+  onAddOptionClick: (optionContainerName: string) => void;
 };
 
 export default function OptionContainer({
@@ -21,6 +23,7 @@ export default function OptionContainer({
   options,
   maxOptionsSelectable,
   onSelectionChange,
+  onAddOptionClick,
 }: OptionContainerProps) {
   // [0] = most-recently-clicked, [..., last] = least-recently-clicked
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -79,7 +82,9 @@ export default function OptionContainer({
           id={`add-new-option-${optionContainerName}`}
           name={`+`}
           selected={false}
-          onClick={() => {}}
+          onClick={() => {
+            onAddOptionClick(optionContainerName);
+          }}
         />
       </div>
     </div>
