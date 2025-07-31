@@ -57,7 +57,9 @@ export default function OptionContainer({
 
   return (
     <div>
-      <p className="px-2 font-bold text-xl">{optionContainerName}</p>
+      <p className="px-2 font-bold text-xl text-purple-200">
+        {optionContainerName}
+      </p>
       <div
         className="flex flex-wrap w-full rounded-lg gap-2 p-2 border-1 
             bg-gray-400 dark:bg-purple-950/10

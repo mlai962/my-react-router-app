@@ -204,7 +204,7 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         </div>
       </Modal>
 
-      <div className="w-full h-max text-4xl font-semibold text-center">
+      <div className="w-full h-max text-4xl font-semibold text-center text-purple-200">
         gamba kappachungus deluxe
       </div>
 
