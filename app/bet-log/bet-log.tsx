@@ -32,12 +32,15 @@ import { db } from "~/firebase";
 import Modal from "~/modal/modal";
 
 type BetLogProps = {
-  users: User[];
-  teams: Team[];
-  lines: Line[];
+  _users: User[];
+  _teams: Team[];
+  _lines: Line[];
 };
 
-export function BetLog({ users, teams, lines }: BetLogProps) {
+export function BetLog({ _users, _teams, _lines }: BetLogProps) {
+  const [users, setUsers] = useState<User[]>(_users);
+  const [teams, setTeams] = useState<Team[]>(_teams);
+  const [lines, setLines] = useState<Line[]>(_lines);
   const [bets, setBets] = useState<Bet[]>([]);
 
   useEffect(() => {
