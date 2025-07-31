@@ -29,6 +29,7 @@ import {
   type DocumentData,
 } from "firebase/firestore";
 import { db } from "~/firebase";
+import Modal from "~/modal/modal";
 
 type BetLogProps = {
   users: User[];
@@ -175,10 +176,21 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
     }
   };
 
-  const handleOnAddOptionClick = (optionContainerName: string) => {};
+  const [isAddOptionModalOpen, setIsAddOptionModalOpen] =
+    useState<boolean>(false);
+  const handleOnAddOptionClick = (optionContainerName: string) => {
+    setIsAddOptionModalOpen(true);
+  };
 
   return (
     <main className="flex-col p-8 space-y-4">
+      <Modal
+        isOpen={isAddOptionModalOpen}
+        onClose={() => setIsAddOptionModalOpen(false)}
+      >
+        modal test
+      </Modal>
+
       <div className="w-full h-max text-4xl font-semibold text-center">
         gamba kappachungus deluxe
       </div>
