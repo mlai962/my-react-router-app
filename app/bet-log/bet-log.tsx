@@ -299,7 +299,7 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
       ></OptionContainer>
 
       <OptionContainer
-        optionContainerName="Map"
+        optionContainerName="Maps"
         options={maps}
         maxOptionsSelectable={1}
         onSelectionChange={(selectionOrder) => {
