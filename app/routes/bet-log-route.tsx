@@ -38,5 +38,5 @@ export async function clientLoader() {
 export default function BetLogRoute({ loaderData }: Route.ComponentProps) {
   const { users, teams, lines } = loaderData;
 
-  return <BetLog users={users} teams={teams} lines={lines} />;
+  return <BetLog _users={users} _teams={teams} _lines={lines} />;
 }

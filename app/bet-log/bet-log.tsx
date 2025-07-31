@@ -29,15 +29,28 @@ import {
   type DocumentData,
 } from "firebase/firestore";
 import { db } from "~/firebase";
+import Modal from "~/modal/modal";
 
 type BetLogProps = {
-  users: User[];
-  teams: Team[];
-  lines: Line[];
+  _users: User[];
+  _teams: Team[];
+  _lines: Line[];
 };
 
-export function BetLog({ users, teams, lines }: BetLogProps) {
+export function BetLog({ _users, _teams, _lines }: BetLogProps) {
+  const [users, setUsers] = useState<User[]>(_users);
+  const [teams, setTeams] = useState<Team[]>(_teams);
+  const [lines, setLines] = useState<Line[]>(_lines);
   const [bets, setBets] = useState<Bet[]>([]);
+
+  const [maps, setMaps] = useState<{ id: string; name: string }[]>([
+    { id: "mapMatch", name: "Match" },
+    { id: "map1", name: "Map 1" },
+    { id: "map2", name: "Map 2" },
+    { id: "map3", name: "Map 3" },
+    { id: "map4", name: "Map 4" },
+    { id: "map5", name: "Map 5" },
+  ]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -60,8 +73,6 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         setBets(
           [...bets].sort((a, b) => b.date.toMillis() - a.date.toMillis())
         );
-
-        console.log(bets);
       }
     );
 
@@ -75,20 +86,6 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
     setBalanceCampbell(calculateBalance("Campbell", bets));
     setBalanceJungwoo(calculateBalance("Jungwoo", bets));
   }, [bets]);
-
-  const maps = [
-    { id: "mapMatch", name: "Match" },
-    { id: "map1", name: "Map 1" },
-    { id: "map2", name: "Map 2" },
-    { id: "map3", name: "Map 3" },
-    { id: "map4", name: "Map 4" },
-    { id: "map5", name: "Map 5" },
-  ];
-
-  const userMap = new Map(users.map((user) => [user.id, user]));
-  const teamMap = new Map(teams.map((team) => [team.id, team]));
-  const mapMap = new Map(maps.map((map) => [map.id, map]));
-  const lineMap = new Map(lines.map((line) => [line.id, line]));
 
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [selectedTeamIds, setSelectedTeamIds] = useState<string[]>([]);
@@ -139,14 +136,16 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         Line,
         DocumentData
       >,
-      map: mapMap.get(selectedMapId)?.name!,
+      map: maps.find((m) => m.id === selectedMapId)?.name!,
       extras: {
         [EXTRA_BINARY_LINE_OPTION]:
-          lineMap.get(selectedLineId)?.lineType === LineType.OVER_UNDER
+          lines.find((l) => l.id === selectedLineId)?.lineType ===
+          LineType.OVER_UNDER
             ? overUnder.over
             : handicap.plus,
         [EXTRA_BINARY_LINE_VALUE]:
-          lineMap.get(selectedLineId)?.lineType === LineType.OVER_UNDER
+          lines.find((l) => l.id === selectedLineId)?.lineType ===
+          LineType.OVER_UNDER
             ? overUnder.value
             : handicap.value,
       },
@@ -175,40 +174,193 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
     }
   };
 
+  const [isAddOptionModalOpen, setIsAddOptionModalOpen] =
+    useState<boolean>(false);
+  const [
+    addOptionModalOptionContainerName,
+    setAddOptionModalOptionContainerName,
+  ] = useState<string>("");
+  const [newOptionName, setNewOptionName] = useState<string>("");
+  const [newLineType, setNewLineType] = useState<LineType>(LineType.NONE);
+  const handleOnAddOptionClick = (optionContainerName: string) => {
+    setAddOptionModalOptionContainerName(optionContainerName);
+    setNewOptionName("");
+
+    setIsAddOptionModalOpen(true);
+  };
+  const handleAddNewOption = async () => {
+    setIsAddOptionModalOpen(false);
+
+    const collectionName =
+      addOptionModalOptionContainerName === "Teams"
+        ? " teams"
+        : addOptionModalOptionContainerName.toLowerCase();
+
+    if (collectionName === "Maps") {
+      setMaps((prev) => [
+        ...prev,
+        { id: `newOptionName-${Date.now()}`, name: newOptionName },
+      ]);
+    } else {
+      const newOption = {
+        name: newOptionName,
+        ...(collectionName === "lines" && { lineType: newLineType }),
+      };
+
+      const docRef = await addDoc(collection(db, collectionName), newOption);
+
+      if (collectionName === "users") {
+        setUsers((prev) => [...prev, { ...newOption, id: docRef.id }]);
+      } else if (collectionName === " teams") {
+        setTeams((prev) => [...prev, { ...newOption, id: docRef.id }]);
+      } else if (collectionName === "lines") {
+        setLines((prev) => [
+          ...prev,
+          { name: newOptionName, lineType: newLineType, id: docRef.id },
+        ]);
+      }
+    }
+  };
+
   return (
     <main className="flex-col p-8 space-y-4">
-      <div className="w-full h-max text-4xl font-semibold text-center">
+      <Modal
+        isOpen={isAddOptionModalOpen}
+        onClose={() => setIsAddOptionModalOpen(false)}
+      >
+        <div className="w-full min-h-64 flex flex-col justify-between items-center text-purple-200">
+          <div className="text-white text-xl">
+            Add a new option to the{" "}
+            <span className="font-bold">
+              {addOptionModalOptionContainerName}
+            </span>{" "}
+            list
+          </div>
+
+          <div
+            className="flex w-full h-14 rounded-lg gap-2 p-2 border-1 items-center
+              bg-gray-400 dark:bg-purple-950/10
+              border-purple-500 dark:border-purple-700
+              focus:outline-none"
+          >
+            <input
+              className="w-full h-8 focus:outline-none text-xl text-center font-semibold"
+              type="text"
+              placeholder="New option name..."
+              onChange={(e) => {
+                setNewOptionName(e.target.value);
+              }}
+            />
+          </div>
+
+          {addOptionModalOptionContainerName === "Lines" ? (
+            <div className="w-full flex justify-between">
+              <button
+                className={`w-16 h-16 rounded-lg border-1
+                  border-purple-500 dark:border-purple-700
+                  hover:bg-purple-200 dark:hover:bg-purple-600
+                  active:bg-purple-300 dark:active:bg-purple-500
+                  hover:cursor-pointer hover:disabled:cursor-not-allowed
+                  ${
+                    newLineType === LineType.NONE
+                      ? "bg-purple-300 dark:bg-purple-500/75"
+                      : "bg-gray-400 dark:bg-purple-700/50"
+                  }
+                `}
+                onClick={() => {
+                  setNewLineType(LineType.NONE);
+                }}
+              >
+                N/A
+              </button>
+              <button
+                className={`w-16 h-16 rounded-lg border-1
+                  border-purple-500 dark:border-purple-700
+                  hover:bg-purple-200 dark:hover:bg-purple-600
+                  active:bg-purple-300 dark:active:bg-purple-500
+                  hover:cursor-pointer hover:disabled:cursor-not-allowed
+                    ${
+                      newLineType === LineType.OVER_UNDER
+                        ? "bg-purple-300 dark:bg-purple-500/75"
+                        : "bg-gray-400 dark:bg-purple-700/50"
+                    }
+                `}
+                onClick={() => {
+                  setNewLineType(LineType.OVER_UNDER);
+                }}
+              >
+                O/U
+              </button>
+              <button
+                className={`w-16 h-16 rounded-lg border-1
+                  border-purple-500 dark:border-purple-700
+                  hover:bg-purple-200 dark:hover:bg-purple-600
+                  active:bg-purple-300 dark:active:bg-purple-500
+                  hover:cursor-pointer hover:disabled:cursor-not-allowed
+                    ${
+                      newLineType === LineType.HANDICAP
+                        ? "bg-purple-300 dark:bg-purple-500/75"
+                        : "bg-gray-400 dark:bg-purple-700/50"
+                    }
+                `}
+                onClick={() => {
+                  setNewLineType(LineType.HANDICAP);
+                }}
+              >
+                +/-
+              </button>
+            </div>
+          ) : (
+            <></>
+          )}
+
+          <button
+            className="flex w-full h-14 rounded-lg gap-2 p-2 border-1 items-center justify-center text-2xl font-bold
+              bg-gray-400 dark:bg-purple-950/10
+              border-purple-500 dark:border-purple-700
+              hover:bg-purple-200 dark:hover:bg-purple-600
+              cursor-pointer focus:outline-none"
+            onClick={() => handleAddNewOption()}
+          >
+            Submit
+          </button>
+        </div>
+      </Modal>
+
+      <div className="w-full h-max text-4xl font-semibold text-center text-purple-200">
         gamba kappachungus deluxe
       </div>
 
       <BetSummary
         userA={
           selectedUserIds.length > 0
-            ? userMap.get(selectedUserIds[0]) ?? null
+            ? users.find((u) => u.id === selectedUserIds[0]) ?? null
             : null
         }
         userB={
           selectedUserIds.length > 1
-            ? userMap.get(selectedUserIds[1]) ?? null
+            ? users.find((u) => u.id === selectedUserIds[1]) ?? null
             : null
         }
         teamA={
           selectedTeamIds.length > 0
-            ? teamMap.get(selectedTeamIds[0]) ?? null
+            ? teams.find((t) => t.id === selectedTeamIds[0]) ?? null
             : null
         }
         teamB={
           selectedTeamIds.length > 1
-            ? teamMap.get(selectedTeamIds[1]) ?? null
+            ? teams.find((t) => t.id === selectedTeamIds[1]) ?? null
             : null
         }
         map={
           selectedMapId.length > 0
-            ? mapMap.get(selectedMapId)?.name ?? null
+            ? maps.find((m) => m.id === selectedMapId)?.name ?? null
             : null
         }
         line={
-          selectedLineId.length > 0 ? lineMap.get(selectedLineId) ?? null : null
+          selectedLineId.length > 0
+            ? lines.find((l) => l.id === selectedLineId) ?? null
+            : null
         }
         overUnder={overUnder}
         handicap={handicap}
@@ -224,6 +376,9 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         onSelectionChange={(selectionOrder) => {
           setSelectedUserIds(selectionOrder);
         }}
+        onAddOptionClick={(optionContainerName) =>
+          handleOnAddOptionClick(optionContainerName)
+        }
       ></OptionContainer>
 
       <OptionContainer
@@ -233,15 +388,21 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         onSelectionChange={(selectionOrder) => {
           setSelectedTeamIds(selectionOrder);
         }}
+        onAddOptionClick={(optionContainerName) =>
+          handleOnAddOptionClick(optionContainerName)
+        }
       ></OptionContainer>
 
       <OptionContainer
-        optionContainerName="Map"
+        optionContainerName="Maps"
         options={maps}
         maxOptionsSelectable={1}
         onSelectionChange={(selectionOrder) => {
           setSelectedMapId(selectionOrder[0] || "");
         }}
+        onAddOptionClick={(optionContainerName) =>
+          handleOnAddOptionClick(optionContainerName)
+        }
       ></OptionContainer>
 
       <OptionContainer
@@ -251,6 +412,9 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         onSelectionChange={(selectionOrder) => {
           setSelectedLineId(selectionOrder[0] || "");
         }}
+        onAddOptionClick={(optionContainerName) =>
+          handleOnAddOptionClick(optionContainerName)
+        }
       ></OptionContainer>
 
       <div className="flex flex-wrap justify-between gap-2">
@@ -340,8 +504,6 @@ const calculateBalance = (userName: string, bets: Bet[]) => {
     } else {
       multiplier = bet.odds;
     }
-
-    console.log(bet.betAmount * (multiplier - 1), total);
 
     if (bet.userA.name === userName && bet.winner === "userA") {
       return total - bet.betAmount * (multiplier - 1);
