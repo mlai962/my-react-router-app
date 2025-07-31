@@ -318,7 +318,7 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
             className="flex w-full h-14 rounded-lg gap-2 p-2 border-1 items-center justify-center text-2xl font-bold
               bg-gray-400 dark:bg-purple-950/10
               border-purple-500 dark:border-purple-700
-              hover:bg-purple-200 dark:hover:bg-purple-600\
+              hover:bg-purple-200 dark:hover:bg-purple-600
               cursor-pointer focus:outline-none"
             onClick={() => handleAddNewOption()}
           >
