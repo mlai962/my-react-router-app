@@ -43,6 +43,15 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
   const [lines, setLines] = useState<Line[]>(_lines);
   const [bets, setBets] = useState<Bet[]>([]);
 
+  const [maps, setMaps] = useState<{ id: string; name: string }[]>([
+    { id: "mapMatch", name: "Match" },
+    { id: "map1", name: "Map 1" },
+    { id: "map2", name: "Map 2" },
+    { id: "map3", name: "Map 3" },
+    { id: "map4", name: "Map 4" },
+    { id: "map5", name: "Map 5" },
+  ]);
+
   useEffect(() => {
     const unsubscribe = onSnapshot(
       collection(db, "bets") as CollectionReference<BetDto>,
@@ -79,20 +88,6 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
     setBalanceCampbell(calculateBalance("Campbell", bets));
     setBalanceJungwoo(calculateBalance("Jungwoo", bets));
   }, [bets]);
-
-  const maps = [
-    { id: "mapMatch", name: "Match" },
-    { id: "map1", name: "Map 1" },
-    { id: "map2", name: "Map 2" },
-    { id: "map3", name: "Map 3" },
-    { id: "map4", name: "Map 4" },
-    { id: "map5", name: "Map 5" },
-  ];
-
-  const userMap = new Map(users.map((user) => [user.id, user]));
-  const teamMap = new Map(teams.map((team) => [team.id, team]));
-  const mapMap = new Map(maps.map((map) => [map.id, map]));
-  const lineMap = new Map(lines.map((line) => [line.id, line]));
 
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [selectedTeamIds, setSelectedTeamIds] = useState<string[]>([]);
@@ -143,14 +138,16 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         Line,
         DocumentData
       >,
-      map: mapMap.get(selectedMapId)?.name!,
+      map: maps.find((m) => m.id === selectedMapId)?.name!,
       extras: {
         [EXTRA_BINARY_LINE_OPTION]:
-          lineMap.get(selectedLineId)?.lineType === LineType.OVER_UNDER
+          lines.find((l) => l.id === selectedLineId)?.lineType ===
+          LineType.OVER_UNDER
             ? overUnder.over
             : handicap.plus,
         [EXTRA_BINARY_LINE_VALUE]:
-          lineMap.get(selectedLineId)?.lineType === LineType.OVER_UNDER
+          lines.find((l) => l.id === selectedLineId)?.lineType ===
+          LineType.OVER_UNDER
             ? overUnder.value
             : handicap.value,
       },
@@ -244,31 +241,33 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
       <BetSummary
         userA={
           selectedUserIds.length > 0
-            ? userMap.get(selectedUserIds[0]) ?? null
+            ? users.find((u) => u.id === selectedUserIds[0]) ?? null
             : null
         }
         userB={
           selectedUserIds.length > 1
-            ? userMap.get(selectedUserIds[1]) ?? null
+            ? users.find((u) => u.id === selectedUserIds[1]) ?? null
             : null
         }
         teamA={
           selectedTeamIds.length > 0
-            ? teamMap.get(selectedTeamIds[0]) ?? null
+            ? teams.find((t) => t.id === selectedTeamIds[0]) ?? null
             : null
         }
         teamB={
           selectedTeamIds.length > 1
-            ? teamMap.get(selectedTeamIds[1]) ?? null
+            ? teams.find((t) => t.id === selectedTeamIds[1]) ?? null
             : null
         }
         map={
           selectedMapId.length > 0
-            ? mapMap.get(selectedMapId)?.name ?? null
+            ? maps.find((m) => m.id === selectedMapId)?.name ?? null
             : null
         }
         line={
-          selectedLineId.length > 0 ? lineMap.get(selectedLineId) ?? null : null
+          selectedLineId.length > 0
+            ? lines.find((l) => l.id === selectedLineId) ?? null
+            : null
         }
         overUnder={overUnder}
         handicap={handicap}
