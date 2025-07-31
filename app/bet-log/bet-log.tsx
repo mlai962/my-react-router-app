@@ -193,14 +193,44 @@ export function BetLog({ users, teams, lines }: BetLogProps) {
         isOpen={isAddOptionModalOpen}
         onClose={() => setIsAddOptionModalOpen(false)}
       >
-        <div className="w-full h-full items-center justify-center">
-          <div className="w-max m-auto text-white text-xl">
+        <div className="w-full min-h-64 flex flex-col justify-between items-center text-purple-200">
+          <div className="text-white text-xl">
             Add a new option to the{" "}
             <span className="font-bold">
               {addOptionModalOptionContainerName}
             </span>{" "}
             list
           </div>
+
+          <div
+            className="flex w-full h-14 rounded-lg gap-2 p-2 border-1 items-center
+            bg-gray-400 dark:bg-purple-950/10
+            border-purple-500 dark:border-purple-700
+              hover:disabled:cursor-not-allowed
+              focus:outline-none"
+          >
+            <input
+              className="w-full h-8 focus:outline-none text-xl font-semibold"
+              type="text"
+              placeholder="New option name..."
+              onChange={(e) => {
+                const raw = e.target.value;
+              }}
+            />
+          </div>
+
+          <button
+            className="flex w-full h-14 rounded-lg gap-2 p-2 border-1 items-center justify-center text-2xl font-bold
+              bg-gray-400 dark:bg-purple-950/10
+              border-purple-500 dark:border-purple-700
+              hover:bg-purple-200 dark:hover:bg-purple-600
+              active:bg-purple-300 dark:active:bg-purple-500
+              hover:disabled:cursor-not-allowed cursor-pointer
+              focus:outline-none"
+            onClick={() => setIsAddOptionModalOpen(false)}
+          >
+            Submit
+          </button>
         </div>
       </Modal>
 
