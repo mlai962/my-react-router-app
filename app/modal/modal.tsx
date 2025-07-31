@@ -1,4 +1,9 @@
-import React, { useEffect, type MouseEvent, type ReactNode } from "react";
+import React, {
+  useEffect,
+  useState,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
 import ReactDOM from "react-dom";
 
 interface ModalProps {
@@ -8,10 +13,14 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  const [show, setShow] = useState(false);
+
   useEffect(() => {
     if (isOpen) {
+      setShow(true);
       document.body.style.overflow = "hidden";
     } else {
+      setShow(false);
       document.body.style.overflow = "auto";
     }
     return () => {
@@ -27,14 +36,18 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   return ReactDOM.createPortal(
     <div
-      className="fixed inset-0 bg-gray-900/90 flex items-center justify-center z-50"
+      className={`fixed inset-0 bg-gray-900/90 flex items-center justify-center z-50 backdrop-blur-xs transition-opacity duration-300 ease-out ${
+        show ? "opacity-100" : "opacity-0"
+      }`}
       // Don't allow outside click to dismiss
       onClick={() => {
         // No-op (modal stays open)
       }}
     >
       <div
-        className="min-w-sm min-h-64 max-w-max max-h-max bg-gray-900 border-2 border-purple-900 rounded-lg p-8 relative"
+        className={`min-w-sm min-h-64 max-w-max max-h-max bg-gray-900 border-2 border-purple-900 rounded-lg p-8 relative transform transition-all duration-300 ease-out ${
+          show ? "scale-100 opacity-100" : "scale-95 opacity-0"
+        }`}
         onClick={stopPropagation}
       >
         <button
