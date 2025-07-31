@@ -73,6 +73,14 @@ export default function OptionContainer({
               }}
             />
           ))}
+
+        <Option
+          key={`add-new-option-${optionContainerName}`}
+          id={`add-new-option-${optionContainerName}`}
+          name={`+`}
+          selected={false}
+          onClick={() => {}}
+        />
       </div>
     </div>
   );
