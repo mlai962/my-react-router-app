@@ -1,7 +1,7 @@
-import type { Handicap, OverUnder } from "~/model/binary-option-and-number";
-import { LineType, type Line } from "~/model/line";
-import type { Team } from "~/model/team";
-import type { User } from "~/model/user";
+import type { Handicap, OverUnder } from "../model/binary-option-and-number";
+import { LineType, type Line } from "../model/line";
+import type { Team } from "../model/team";
+import type { User } from "../model/user";
 
 type BetSummaryProps = {
   userA: User | null;
