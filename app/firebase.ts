@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -23,6 +23,8 @@ export const storage = getStorage(app);
 
 // only run analytics in the browser
 export const analytics =
-  typeof window !== "undefined" ? getAnalytics(app) : null;
+  (await isSupported()) && typeof window !== "undefined"
+    ? getAnalytics(app)
+    : null;
 
 export default app;
