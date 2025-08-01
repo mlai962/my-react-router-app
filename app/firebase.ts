@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported, type Analytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -22,7 +22,9 @@ export const db = getFirestore(app);
 export const storage = getStorage(app);
 
 // only run analytics in the browser
-export const analytics =
-  typeof window !== "undefined" ? getAnalytics(app) : null;
-
-export default app;
+export const analyticsPromise: Promise<Analytics | null> = (async () => {
+  if ((await isSupported()) && typeof window !== "undefined") {
+    return getAnalytics(app);
+  }
+  return null;
+})();

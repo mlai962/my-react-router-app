@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import BinaryOptionAndNumberInput, {
   BinaryOptionType,
-} from "~/inputs/binary-option-and-number-input";
-import { LineType, type Line } from "~/model/line";
-import { Handicap, OverUnder } from "~/model/binary-option-and-number";
-import type { Team } from "~/model/team";
-import type { User } from "~/model/user";
-import OptionContainer from "~/option-container/option-container";
-import NumberInput from "~/inputs/bet-amount-input";
+} from "../inputs/binary-option-and-number-input";
+import { LineType, type Line } from "../model/line";
+import { Handicap, OverUnder } from "../model/binary-option-and-number";
+import type { Team } from "../model/team";
+import type { User } from "../model/user";
+import OptionContainer from "../option-container/option-container";
+import NumberInput from "../inputs/bet-amount-input";
 import BetSummary from "./bet-summary";
 import {
   Bet,
   EXTRA_BINARY_LINE_OPTION,
   EXTRA_BINARY_LINE_VALUE,
   type BetDto,
-} from "~/model/bet";
+} from "../model/bet";
 import BetHistory from "./bet-history";
 import {
   addDoc,
@@ -28,8 +28,8 @@ import {
   updateDoc,
   type DocumentData,
 } from "firebase/firestore";
-import { db } from "~/firebase";
-import Modal from "~/modal/modal";
+import { db } from "../firebase";
+import Modal from "../modal/modal";
 
 type BetLogProps = {
   _users: User[];

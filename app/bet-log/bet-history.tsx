@@ -1,12 +1,11 @@
-import { deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { useState } from "react";
-import { db } from "~/firebase";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
 import {
   Bet,
   EXTRA_BINARY_LINE_OPTION,
   EXTRA_BINARY_LINE_VALUE,
-} from "~/model/bet";
-import { LineType } from "~/model/line";
+} from "../model/bet";
+import { LineType } from "../model/line";
 
 type BetHistoryProps = {
   bets: Bet[];
@@ -17,8 +16,6 @@ export default function BetHistory({
   bets,
   handleBetSettlement,
 }: BetHistoryProps) {
-  const betMap = new Map(bets.map((bet) => [bet.id, bet]));
-
   return (
     <div className="w-full h-max space-y-1">
       {bets.map((bet) => {

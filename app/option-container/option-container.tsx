@@ -1,4 +1,4 @@
-import type { BaseFirebaseDocument } from "~/model/base-firebase-document";
+import type { BaseFirebaseDocument } from "../model/base-firebase-document";
 import Option from "./option";
 import { useEffect, useState } from "react";
 

@@ -1,10 +1,10 @@
 import { collection, CollectionReference, getDocs } from "firebase/firestore";
-import { BetLog } from "~/bet-log/bet-log";
-import { db } from "~/firebase";
+import { BetLog } from "../bet-log/bet-log";
+import { db } from "../firebase";
 import type { Route } from "./+types/bet-log-route";
-import type { User } from "~/model/user";
-import type { Team } from "~/model/team";
-import type { Line } from "~/model/line";
+import type { User } from "../model/user";
+import type { Team } from "../model/team";
+import type { Line } from "../model/line";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "Bet Log" }, { name: "description", content: "Bet Log" }];

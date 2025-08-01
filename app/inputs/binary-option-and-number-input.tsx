@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Handicap, OverUnder } from "~/model/binary-option-and-number";
+import { Handicap, OverUnder } from "../model/binary-option-and-number";
 
 export enum BinaryOptionType {
   OVER_UNDER,
