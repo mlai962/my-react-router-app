@@ -1,6 +1,8 @@
 import { useState, type ReactNode } from "react";
 
 type DrawerProps = {
+  trigger: ReactNode;
+  triggerSize: string;
   children: ReactNode;
 };
 
@@ -10,7 +12,7 @@ type DrawerProps = {
  * - Clicking the close (×) button or outside overlay closes it.
  * - Uses Tailwind CSS for styling and transitions.
  */
-const Drawer = ({ children }: DrawerProps) => {
+const Drawer = ({ trigger, triggerSize, children }: DrawerProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const openDrawer = () => setIsOpen(true);
@@ -22,10 +24,10 @@ const Drawer = ({ children }: DrawerProps) => {
       {!isOpen && (
         <button
           onClick={openDrawer}
-          className="fixed bottom-8 left-8 bg-blue-600 text-white p-4 rounded-full shadow-lg z-50 focus:outline-none"
+          className={`fixed ${triggerSize} bottom-4 right-4 shadow-lg z-50 cursor-pointer focus:outline-none`}
           aria-label="Open Drawer"
         >
-          Open
+          {trigger}
         </button>
       )}
 
@@ -46,17 +48,28 @@ const Drawer = ({ children }: DrawerProps) => {
         role="dialog"
         aria-modal={isOpen}
       >
-        <div className="p-4 flex justify-between items-center border-b">
-          <h2 className="text-lg font-semibold">Menu</h2>
-          <button
-            onClick={closeDrawer}
-            className="text-gray-600 hover:text-gray-800 focus:outline-none"
-            aria-label="Close Drawer"
-          >
-            ×
+        <div className="absolute top-2 right-2 flex justify-between items-center">
+          <button onClick={closeDrawer} aria-label="Close Drawer">
+            <svg
+              className="w-6 h-6 text-gray-800 dark:text-white cursor-pointer"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18 17.94 6M18 18 6.06 6"
+              />
+            </svg>
           </button>
         </div>
-        <div className="p-4">
+        <div className="mt-6 p-4">
           {/* Drawer content */}
           {children}
         </div>
