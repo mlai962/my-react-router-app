@@ -3,6 +3,7 @@ import { useState, type ReactNode } from "react";
 type DrawerProps = {
   trigger: ReactNode;
   triggerSize: string;
+  width: string;
   children: ReactNode;
 };
 
@@ -12,7 +13,7 @@ type DrawerProps = {
  * - Clicking the close (×) button or outside overlay closes it.
  * - Uses Tailwind CSS for styling and transitions.
  */
-const Drawer = ({ trigger, triggerSize, children }: DrawerProps) => {
+const Drawer = ({ trigger, triggerSize, width, children }: DrawerProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const openDrawer = () => setIsOpen(true);
@@ -42,7 +43,7 @@ const Drawer = ({ trigger, triggerSize, children }: DrawerProps) => {
 
       {/* Drawer Panel */}
       <div
-        className={`fixed top-0 right-0 h-full w-64 bg-white dark:bg-gray-800 shadow-xl transform ${
+        className={`fixed top-0 right-0 h-full ${width} bg-white dark:bg-gray-950 border-l-2 border-purple-800 shadow-xl transform ${
           isOpen ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300 ease-in-out z-50`}
         role="dialog"
