@@ -29,7 +29,8 @@ import {
   type DocumentData,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import Modal from "../modal/modal";
+import Modal from "../common-components/modal";
+import Drawer from "~/common-components/drawer";
 
 type BetLogProps = {
   _users: User[];
@@ -78,14 +79,6 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
 
     return () => unsubscribe();
   }, []);
-
-  const [balanceCampbell, setBalanceCampbell] = useState(0);
-  const [balanceJungwoo, setBalanceJungwoo] = useState(0);
-
-  useEffect(() => {
-    setBalanceCampbell(calculateBalance("Campbell", bets));
-    setBalanceJungwoo(calculateBalance("Jungwoo", bets));
-  }, [bets]);
 
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [selectedTeamIds, setSelectedTeamIds] = useState<string[]>([]);
@@ -224,6 +217,48 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
 
   return (
     <main className="flex-col p-8 space-y-4">
+      <Drawer
+        trigger={
+          <div className="bg-gray-900 border-1 border-purple-800 p-4 rounded-lg shadow-lg hover:bg-gray-800 hover:border-2">
+            Show Balances
+          </div>
+        }
+        triggerSize="w-max h-max"
+        width="w-80"
+      >
+        <div className="flex-col space-y-4">
+          {users.map((u) => {
+            const totalNetProfit = calculateBalance(u.name, "", bets);
+
+            return (
+              <div>
+                <div className="font-extrabold underline">{u.name}</div>
+                <div>
+                  Total Net Profit: {totalNetProfit < 0 ? "-" : "+"}$
+                  {totalNetProfit < 0 ? -totalNetProfit : totalNetProfit}
+                  {users
+                    .filter((u2) => u2.id != u.id)
+                    .map((u2) => {
+                      const userNetProfit = calculateBalance(
+                        u.name,
+                        u2.name,
+                        bets
+                      );
+
+                      return (
+                        <div>
+                          Profit vs {u2.name}: {userNetProfit < 0 ? "-" : "+"}$
+                          {userNetProfit < 0 ? -userNetProfit : userNetProfit}
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </Drawer>
+
       <Modal
         isOpen={isAddOptionModalOpen}
         onClose={() => setIsAddOptionModalOpen(false)}
@@ -475,16 +510,6 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         </button>
       </div>
 
-      <div className="w-full space-y-1">
-        <div className="w-full text-3xl font-semibold text-center">{`vs Campbell [${
-          balanceCampbell < 0 ? "-" : "+"
-        }$${balanceCampbell < 0 ? -balanceCampbell : balanceCampbell}]`}</div>
-
-        <div className="w-full text-3xl font-semibold text-center">{`vs Jungwoo [${
-          balanceJungwoo < 0 ? "-" : "+"
-        }$${balanceJungwoo < 0 ? -balanceJungwoo : balanceJungwoo}]`}</div>
-      </div>
-
       <BetHistory
         bets={bets}
         handleBetSettlement={handleBetSettlement}
@@ -493,7 +518,11 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
   );
 }
 
-const calculateBalance = (userName: string, bets: Bet[]) => {
+/**
+ * userA: the user whose balance is being calculated, the return value is net profit relative to them
+ * userB: the other user who userA's profit is being calculated against, EMPTY STRING if all users
+ */
+const calculateBalance = (userA: string, userB: string, bets: Bet[]) => {
   return bets.reduce((total, bet) => {
     var multiplier: number;
 
@@ -505,14 +534,30 @@ const calculateBalance = (userName: string, bets: Bet[]) => {
       multiplier = bet.odds;
     }
 
-    if (bet.userA.name === userName && bet.winner === "userA") {
-      return total - bet.betAmount * (multiplier - 1);
-    } else if (bet.userA.name === userName && bet.winner === "userB") {
-      return total + bet.betAmount;
-    } else if (bet.userB.name === userName && bet.winner === "userA") {
+    if (
+      bet.userA.name === userA &&
+      (bet.userB.name === userB || userB === "") &&
+      bet.winner === "userA"
+    ) {
       return total + bet.betAmount * (multiplier - 1);
-    } else if (bet.userB.name === userName && bet.winner === "userB") {
+    } else if (
+      bet.userA.name === userA &&
+      (bet.userB.name === userB || userB === "") &&
+      bet.winner === "userB"
+    ) {
       return total - bet.betAmount;
+    } else if (
+      bet.userB.name === userA &&
+      (bet.userA.name === userB || userB === "") &&
+      bet.winner === "userA"
+    ) {
+      return total - bet.betAmount * (multiplier - 1);
+    } else if (
+      bet.userB.name === userA &&
+      (bet.userA.name === userB || userB === "") &&
+      bet.winner === "userB"
+    ) {
+      return total + bet.betAmount;
     }
 
     return total;
