@@ -35,7 +35,7 @@ const Drawer = ({ trigger, triggerSize, width, children }: DrawerProps) => {
       {/* Overlay: clicking closes drawer */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-transparent h-full z-40"
+          className="fixed inset-0 bg-gray-900/90 backdrop-blur-xs h-full z-40"
           onClick={closeDrawer}
           aria-hidden="true"
         />
