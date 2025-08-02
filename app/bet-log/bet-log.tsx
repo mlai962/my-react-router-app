@@ -30,7 +30,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import Modal from "../common-components/modal";
-import Drawer from "~/common-components/drawer";
+import Drawer from "../common-components/drawer";
 
 type BetLogProps = {
   _users: User[];
