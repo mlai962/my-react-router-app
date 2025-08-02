@@ -228,27 +228,19 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
       >
         <div className="flex-col space-y-4">
           {users.map((u) => {
-            const totalNetProfit = calculateBalance(u.name, "", bets);
-
             return (
               <div>
                 <div className="font-extrabold underline">{u.name}</div>
                 <div>
-                  Total Net Profit: {totalNetProfit < 0 ? "-" : "+"}$
-                  {totalNetProfit < 0 ? -totalNetProfit : totalNetProfit}
+                  Total Net Profit:{" "}
+                  {formatProfit(calculateProfit(u.name, "", bets))}
                   {users
                     .filter((u2) => u2.id != u.id)
                     .map((u2) => {
-                      const userNetProfit = calculateBalance(
-                        u.name,
-                        u2.name,
-                        bets
-                      );
-
                       return (
                         <div>
-                          Profit vs {u2.name}: {userNetProfit < 0 ? "-" : "+"}$
-                          {userNetProfit < 0 ? -userNetProfit : userNetProfit}
+                          Profit vs {u2.name}:{" "}
+                          {formatProfit(calculateProfit(u.name, u2.name, bets))}
                         </div>
                       );
                     })}
@@ -522,7 +514,7 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
  * userA: the user whose balance is being calculated, the return value is net profit relative to them
  * userB: the other user who userA's profit is being calculated against, EMPTY STRING if all users
  */
-const calculateBalance = (userA: string, userB: string, bets: Bet[]) => {
+const calculateProfit = (userA: string, userB: string, bets: Bet[]) => {
   return bets.reduce((total, bet) => {
     var multiplier: number;
 
@@ -562,4 +554,8 @@ const calculateBalance = (userA: string, userB: string, bets: Bet[]) => {
 
     return total;
   }, 0.0);
+};
+
+const formatProfit = (profit: number) => {
+  return `${profit < 0 ? "-" : "+"}$${profit < 0 ? -profit : profit}`;
 };
