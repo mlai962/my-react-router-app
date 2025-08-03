@@ -76,8 +76,8 @@ export default function BetHistory({
               @{bet.odds.toFixed(2)}x ${bet.betAmount}
             </div>
 
-            <div className="flex space-x-1">
-              <label className="flex items-center text-sm font-medium">
+            <div className="flex w-full">
+              <label className="flex items-center text-sm font-medium w-1/3">
                 <input
                   id={"radio-unsettled-" + bet.id}
                   type="radio"
@@ -94,7 +94,7 @@ export default function BetHistory({
                 Unsettled
               </label>
 
-              <label className="flex items-center text-sm font-medium">
+              <label className="flex items-center text-sm font-medium w-1/3">
                 <input
                   id={"radio-userA-" + bet.id}
                   type="radio"
@@ -111,7 +111,7 @@ export default function BetHistory({
                 {bet.userA.name}
               </label>
 
-              <label className="flex items-center text-sm font-medium">
+              <label className="flex items-center text-sm font-medium w-1/3">
                 <input
                   id={"radio-userB-" + bet.id}
                   type="radio"

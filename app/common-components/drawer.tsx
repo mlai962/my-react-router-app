@@ -25,7 +25,7 @@ const Drawer = ({ trigger, triggerSize, width, children }: DrawerProps) => {
       {!isOpen && (
         <button
           onClick={openDrawer}
-          className={`fixed ${triggerSize} bottom-4 right-4 shadow-lg z-50 cursor-pointer focus:outline-none`}
+          className={`fixed ${triggerSize} bottom-4 right-4 shadow-black shadow-lg z-50 cursor-pointer focus:outline-none`}
           aria-label="Open Drawer"
         >
           {trigger}
@@ -45,7 +45,7 @@ const Drawer = ({ trigger, triggerSize, width, children }: DrawerProps) => {
       <div
         className={`fixed top-0 right-0 h-full ${width} bg-white dark:bg-gray-950 border-l-2 border-purple-800 shadow-xl transform ${
           isOpen ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-300 ease-in-out z-50`}
+        } transition-transform duration-300 ease-in-out z-50 rounded-l-2xl`}
         role="dialog"
         aria-modal={isOpen}
       >
