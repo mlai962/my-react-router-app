@@ -38,6 +38,8 @@ export default function NumberInput({
       <input
         className="w-52 h-16 focus:outline-none text-xl font-semibold"
         type="text"
+        inputMode="decimal"
+        enterKeyHint="done"
         placeholder={placeholder}
         onChange={(e) => {
           const raw = e.target.value;
