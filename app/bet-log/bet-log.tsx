@@ -20,6 +20,7 @@ import {
   addDoc,
   collection,
   CollectionReference,
+  deleteDoc,
   doc,
   DocumentReference,
   getDoc,
@@ -31,6 +32,7 @@ import {
 import { db } from "../firebase";
 import Modal from "../common-components/modal";
 import Drawer from "../common-components/drawer";
+import Spinner from "../common-components/spinner";
 
 type BetLogProps = {
   _users: User[];
@@ -74,6 +76,10 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         setBets(
           [...bets].sort((a, b) => b.date.toMillis() - a.date.toMillis())
         );
+
+        setIsShowBetSubmitSpinner(false);
+        setIsShowBetSettlementSpinner(false);
+        setCurrentBetIdBeingSettled("");
       }
     );
 
@@ -100,6 +106,8 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
   const [odds, setOdds] = useState<number>(0);
   const [betAmount, setBetAmount] = useState<number>(0);
 
+  const [isShowBetSubmitSpinner, setIsShowBetSubmitSpinner] =
+    useState<boolean>(false);
   const handleBetSubmit = async () => {
     if (selectedUserIds.length < 2) return;
     if (selectedTeamIds.length < 2) return;
@@ -107,6 +115,8 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
     if (selectedLineId.length === 0) return;
     if (odds <= 0) return;
     if (betAmount <= 0) return;
+
+    setIsShowBetSubmitSpinner(true);
 
     await addDoc(collection(db, "bets"), {
       userA: doc(db, "users", selectedUserIds[0]) as DocumentReference<
@@ -149,7 +159,14 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
     });
   };
 
+  const [isShowBetSettlementSpinner, setIsShowBetSettlementSpinner] =
+    useState<boolean>(false);
+  const [currentBetIdBeingSettled, setCurrentBetIdBeingSettled] =
+    useState<string>("");
   const handleBetSettlement = async (betId: string, winner: string) => {
+    setIsShowBetSettlementSpinner(true);
+    setCurrentBetIdBeingSettled(betId);
+
     const betRef = doc(db, "bets", betId);
 
     try {
@@ -165,6 +182,15 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
     } catch (error) {
       console.error("Error updating document:", error);
     }
+
+    setIsShowBetSettlementSpinner(false);
+    setCurrentBetIdBeingSettled("");
+  };
+  const handleBetDeletion = async (betId: string) => {
+    setIsShowBetSettlementSpinner(true);
+    setCurrentBetIdBeingSettled(betId);
+
+    await deleteDoc(doc(db, "bets", betId));
   };
 
   const [isAddOptionModalOpen, setIsAddOptionModalOpen] =
@@ -229,7 +255,7 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         <div className="flex-col space-y-4">
           {users.map((u) => {
             return (
-              <div>
+              <div key={`${u.id}-profit`}>
                 <div className="font-extrabold underline">{u.name}</div>
                 <div>
                   Total Net Profit:{" "}
@@ -238,7 +264,7 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
                     .filter((u2) => u2.id != u.id)
                     .map((u2) => {
                       return (
-                        <div>
+                        <div key={`${u.id}-${u2.id}-profit`}>
                           Profit vs {u2.name}:{" "}
                           {formatProfit(calculateProfit(u.name, u2.name, bets))}
                         </div>
@@ -491,21 +517,33 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         <button
           type="button"
           onClick={() => handleBetSubmit()}
-          className="w-[258px] h-[82px] rounded-lg border-1 text-purple-200
+          className="w-[258px] h-[82px] rounded-lg border-1 text-purple-200 relative
             bg-gray-400 dark:bg-purple-950/10
             border-purple-500 dark:border-purple-700
             hover:bg-purple-200 dark:hover:bg-purple-600
             active:bg-purple-300 dark:active:bg-purple-500
             hover:cursor-pointer hover:disabled:cursor-not-allowed"
         >
-          submit gamba
+          <span className={`${isShowBetSubmitSpinner ? "opacity-20" : ""}`}>
+            submit gamba
+          </span>
+          <Spinner isShowSpinner={isShowBetSubmitSpinner} />
         </button>
       </div>
 
-      <BetHistory
-        bets={bets}
-        handleBetSettlement={handleBetSettlement}
-      ></BetHistory>
+      <div className="w-full relative">
+        <div className={`mt-10 ${bets.length === 0 ? "block" : "hidden"}`}>
+          <Spinner isShowSpinner={bets.length === 0} />
+        </div>
+
+        <BetHistory
+          bets={bets}
+          handleBetSettlement={handleBetSettlement}
+          handleBetDeletion={handleBetDeletion}
+          isShowBetSettlementSpinner={isShowBetSettlementSpinner}
+          currentBetIdBeingSettled={currentBetIdBeingSettled}
+        />
+      </div>
     </main>
   );
 }
