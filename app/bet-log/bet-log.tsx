@@ -532,13 +532,19 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         </button>
       </div>
 
-      <BetHistory
-        bets={bets}
-        handleBetSettlement={handleBetSettlement}
-        handleBetDeletion={handleBetDeletion}
-        isShowBetSettlementSpinner={isShowBetSettlementSpinner}
-        currentBetIdBeingSettled={currentBetIdBeingSettled}
-      ></BetHistory>
+      <div className="w-full relative">
+        <div className={`mt-10 ${bets.length === 0 ? "block" : "hidden"}`}>
+          <Spinner isShowSpinner={bets.length === 0} />
+        </div>
+
+        <BetHistory
+          bets={bets}
+          handleBetSettlement={handleBetSettlement}
+          handleBetDeletion={handleBetDeletion}
+          isShowBetSettlementSpinner={isShowBetSettlementSpinner}
+          currentBetIdBeingSettled={currentBetIdBeingSettled}
+        />
+      </div>
     </main>
   );
 }
