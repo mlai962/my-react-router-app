@@ -31,6 +31,7 @@ import {
 import { db } from "../firebase";
 import Modal from "../common-components/modal";
 import Drawer from "../common-components/drawer";
+import Spinner from "../common-components/spinner";
 
 type BetLogProps = {
   _users: User[];
@@ -100,6 +101,8 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
   const [odds, setOdds] = useState<number>(0);
   const [betAmount, setBetAmount] = useState<number>(0);
 
+  const [isShowBetSubmitSpinner, setIsShowBetSubmitSpinner] =
+    useState<boolean>(false);
   const handleBetSubmit = async () => {
     if (selectedUserIds.length < 2) return;
     if (selectedTeamIds.length < 2) return;
@@ -107,6 +110,8 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
     if (selectedLineId.length === 0) return;
     if (odds <= 0) return;
     if (betAmount <= 0) return;
+
+    setIsShowBetSubmitSpinner(true);
 
     await addDoc(collection(db, "bets"), {
       userA: doc(db, "users", selectedUserIds[0]) as DocumentReference<
@@ -147,6 +152,8 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
       odds: odds,
       winner: "",
     });
+
+    setIsShowBetSubmitSpinner(false);
   };
 
   const handleBetSettlement = async (betId: string, winner: string) => {
@@ -491,14 +498,17 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         <button
           type="button"
           onClick={() => handleBetSubmit()}
-          className="w-[258px] h-[82px] rounded-lg border-1 text-purple-200
+          className="w-[258px] h-[82px] rounded-lg border-1 text-purple-200 relative
             bg-gray-400 dark:bg-purple-950/10
             border-purple-500 dark:border-purple-700
             hover:bg-purple-200 dark:hover:bg-purple-600
             active:bg-purple-300 dark:active:bg-purple-500
             hover:cursor-pointer hover:disabled:cursor-not-allowed"
         >
-          submit gamba
+          <span className={`${isShowBetSubmitSpinner ? "opacity-20" : ""}`}>
+            submit gamba
+          </span>
+          <Spinner isShowSpinner={isShowBetSubmitSpinner} />
         </button>
       </div>
 
