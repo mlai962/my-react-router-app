@@ -76,56 +76,68 @@ export default function BetHistory({
             </div>
 
             <div className="flex w-full">
-              <label className="flex items-center text-sm font-medium w-1/3">
-                <input
-                  id={"radio-unsettled-" + bet.id}
-                  type="radio"
-                  value=""
-                  name={"settle-bet-radio-group" + bet.id}
-                  checked={bet.winner.length === 0}
-                  onChange={(e) => handleBetSettlement(bet.id, e.target.value)}
-                  className="w-4 h-4 me-1 
+              <div className="w-1/3 flex items-center">
+                <label className="flex items-center text-sm font-medium hover:cursor-pointer">
+                  <input
+                    id={"radio-unsettled-" + bet.id}
+                    type="radio"
+                    value=""
+                    name={"settle-bet-radio-group" + bet.id}
+                    checked={bet.winner.length === 0}
+                    onChange={(e) =>
+                      handleBetSettlement(bet.id, e.target.value)
+                    }
+                    className="w-4 h-4 me-1 
                     accent-purple-800 dark:accent-purple-600
                     bg-gray-100 dark:bg-gray-700
                     border-gray-300 dark:border-gray-600
-                    focus:ring-0"
-                />
-                Unsettled
-              </label>
+                    focus:ring-0 hover:cursor-pointer"
+                  />
+                  Unsettled
+                </label>
+              </div>
 
-              <label className="flex items-center text-sm font-medium w-1/3">
-                <input
-                  id={"radio-userA-" + bet.id}
-                  type="radio"
-                  value="userA"
-                  name={"settle-bet-radio-group" + bet.id}
-                  checked={bet.winner === "userA"}
-                  onChange={(e) => handleBetSettlement(bet.id, e.target.value)}
-                  className="w-4 h-4 me-1 
+              <div className="w-1/3 flex items-center">
+                <label className="flex items-center text-sm font-medium hover:cursor-pointer">
+                  <input
+                    id={"radio-userA-" + bet.id}
+                    type="radio"
+                    value="userA"
+                    name={"settle-bet-radio-group" + bet.id}
+                    checked={bet.winner === "userA"}
+                    onChange={(e) =>
+                      handleBetSettlement(bet.id, e.target.value)
+                    }
+                    className="w-4 h-4 me-1 
                     accent-purple-800 dark:accent-purple-600
                     bg-gray-100 dark:bg-gray-700
                     border-gray-300 dark:border-gray-600
                     focus:ring-0"
-                />
-                {bet.userA.name}
-              </label>
+                  />
+                  {bet.userA.name}
+                </label>
+              </div>
 
-              <label className="flex items-center text-sm font-medium w-1/3">
-                <input
-                  id={"radio-userB-" + bet.id}
-                  type="radio"
-                  value="userB"
-                  name={"settle-bet-radio-group" + bet.id}
-                  checked={bet.winner === "userB"}
-                  onChange={(e) => handleBetSettlement(bet.id, e.target.value)}
-                  className="w-4 h-4 me-1 
+              <div className="w-1/3 flex items-center">
+                <label className="flex items-center text-sm font-medium hover:cursor-pointer">
+                  <input
+                    id={"radio-userB-" + bet.id}
+                    type="radio"
+                    value="userB"
+                    name={"settle-bet-radio-group" + bet.id}
+                    checked={bet.winner === "userB"}
+                    onChange={(e) =>
+                      handleBetSettlement(bet.id, e.target.value)
+                    }
+                    className="w-4 h-4 me-1 
                     accent-purple-800 dark:accent-purple-600
                     bg-gray-100 dark:bg-gray-700
                     border-gray-300 dark:border-gray-600
                     focus:ring-0"
-                />
-                {bet.userB.name}
-              </label>
+                  />
+                  {bet.userB.name}
+                </label>
+              </div>
             </div>
           </div>
         );
