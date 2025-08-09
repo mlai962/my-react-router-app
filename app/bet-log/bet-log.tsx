@@ -76,6 +76,10 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         setBets(
           [...bets].sort((a, b) => b.date.toMillis() - a.date.toMillis())
         );
+
+        setIsShowBetSubmitSpinner(false);
+        setIsShowBetSettlementSpinner(false);
+        setCurrentBetIdBeingSettled("");
       }
     );
 
@@ -153,8 +157,6 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
       odds: odds,
       winner: "",
     });
-
-    setIsShowBetSubmitSpinner(false);
   };
 
   const [isShowBetSettlementSpinner, setIsShowBetSettlementSpinner] =
@@ -189,9 +191,6 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
     setCurrentBetIdBeingSettled(betId);
 
     await deleteDoc(doc(db, "bets", betId));
-
-    setIsShowBetSettlementSpinner(false);
-    setCurrentBetIdBeingSettled("");
   };
 
   const [isAddOptionModalOpen, setIsAddOptionModalOpen] =
