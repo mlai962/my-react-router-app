@@ -27,33 +27,32 @@ export default function BetHistory({
         return (
           <div
             key={bet.id}
-            className="w-full h-max grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 rounded-lg p-2 border-1 
+            className="w-full h-max grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 rounded-lg p-2 border-1 relative
             text-purple-200
             bg-gray-400 dark:bg-purple-950/10
             border-purple-500 dark:border-purple-700"
           >
-            <div className="flex items-center gap-1">
-              <svg
-                className="w-6 h-6 text-gray-800 dark:text-white cursor-pointer"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-                onClick={async () => await deleteDoc(doc(db, "bets", bet.id))}
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
-                />
-              </svg>
+            <svg
+              className="w-6 h-6 text-gray-800 dark:text-white 
+                hover:text-red-500/75 cursor-pointer absolute top-1 right-1"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+              onClick={async () => await deleteDoc(doc(db, "bets", bet.id))}
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+              />
+            </svg>
 
-              {bet.date.toDate().toDateString()}
-            </div>
+            <div>{bet.date.toDate().toDateString()}</div>
 
             <div>
               {bet.userA.name} vs {bet.userB.name}
