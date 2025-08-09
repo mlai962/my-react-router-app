@@ -20,6 +20,7 @@ import {
   addDoc,
   collection,
   CollectionReference,
+  deleteDoc,
   doc,
   DocumentReference,
   getDoc,
@@ -156,7 +157,14 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
     setIsShowBetSubmitSpinner(false);
   };
 
+  const [isShowBetSettlementSpinner, setIsShowBetSettlementSpinner] =
+    useState<boolean>(false);
+  const [currentBetIdBeingSettled, setCurrentBetIdBeingSettled] =
+    useState<string>("");
   const handleBetSettlement = async (betId: string, winner: string) => {
+    setIsShowBetSettlementSpinner(true);
+    setCurrentBetIdBeingSettled(betId);
+
     const betRef = doc(db, "bets", betId);
 
     try {
@@ -172,6 +180,18 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
     } catch (error) {
       console.error("Error updating document:", error);
     }
+
+    setIsShowBetSettlementSpinner(false);
+    setCurrentBetIdBeingSettled("");
+  };
+  const handleBetDeletion = async (betId: string) => {
+    setIsShowBetSettlementSpinner(true);
+    setCurrentBetIdBeingSettled(betId);
+
+    await deleteDoc(doc(db, "bets", betId));
+
+    setIsShowBetSettlementSpinner(false);
+    setCurrentBetIdBeingSettled("");
   };
 
   const [isAddOptionModalOpen, setIsAddOptionModalOpen] =
@@ -515,6 +535,9 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
       <BetHistory
         bets={bets}
         handleBetSettlement={handleBetSettlement}
+        handleBetDeletion={handleBetDeletion}
+        isShowBetSettlementSpinner={isShowBetSettlementSpinner}
+        currentBetIdBeingSettled={currentBetIdBeingSettled}
       ></BetHistory>
     </main>
   );
