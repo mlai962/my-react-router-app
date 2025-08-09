@@ -255,7 +255,7 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         <div className="flex-col space-y-4">
           {users.map((u) => {
             return (
-              <div>
+              <div key={`${u.id}-profit`}>
                 <div className="font-extrabold underline">{u.name}</div>
                 <div>
                   Total Net Profit:{" "}
@@ -264,7 +264,7 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
                     .filter((u2) => u2.id != u.id)
                     .map((u2) => {
                       return (
-                        <div>
+                        <div key={`${u.id}-${u2.id}-profit`}>
                           Profit vs {u2.name}:{" "}
                           {formatProfit(calculateProfit(u.name, u2.name, bets))}
                         </div>
