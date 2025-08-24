@@ -103,7 +103,7 @@ export default function BinaryOptionAndNumberInput({
         className={`w-24 h-16 rounded-lg border-1 p-2
           border-purple-500 dark:border-purple-700
           hover:disabled:cursor-not-allowed
-          focus:outline-none
+          focus:outline-none caret-purple-400
         `}
         type="number"
         step="0.5"

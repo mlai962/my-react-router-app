@@ -432,6 +432,7 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         onAddOptionClick={(optionContainerName) =>
           handleOnAddOptionClick(optionContainerName)
         }
+        initialSelectedIds={[]}
       ></OptionContainer>
 
       <OptionContainer
@@ -444,6 +445,7 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         onAddOptionClick={(optionContainerName) =>
           handleOnAddOptionClick(optionContainerName)
         }
+        initialSelectedIds={[]}
       ></OptionContainer>
 
       <OptionContainer
@@ -456,6 +458,7 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         onAddOptionClick={(optionContainerName) =>
           handleOnAddOptionClick(optionContainerName)
         }
+        initialSelectedIds={["mapMatch"]}
       ></OptionContainer>
 
       <OptionContainer
@@ -468,9 +471,10 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         onAddOptionClick={(optionContainerName) =>
           handleOnAddOptionClick(optionContainerName)
         }
+        initialSelectedIds={["VqU4d6t3wefwe7bLH7so"]}
       ></OptionContainer>
 
-      <div className="flex flex-wrap justify-between gap-2">
+      <div className="flex flex-wrap gap-2 justify-center">
         <div
           className="w-[258px] h-[82px] p-2 rounded-lg border-1 text-purple-200
             bg-gray-400 dark:bg-purple-950/10
@@ -531,7 +535,7 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         </button>
       </div>
 
-      <div className="w-full relative">
+      <div className="w-full min-h-32 relative">
         <div className={`mt-10 ${bets.length === 0 ? "block" : "hidden"}`}>
           <Spinner isShowSpinner={bets.length === 0} />
         </div>

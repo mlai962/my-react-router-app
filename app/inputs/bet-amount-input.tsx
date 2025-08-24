@@ -36,7 +36,7 @@ export default function NumberInput({
       </svg>
 
       <input
-        className="w-52 h-16 focus:outline-none text-xl font-semibold"
+        className="w-52 h-16 focus:outline-none text-xl font-semibold caret-purple-400"
         type="text"
         inputMode="decimal"
         enterKeyHint="done"

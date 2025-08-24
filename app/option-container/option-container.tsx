@@ -16,6 +16,8 @@ type OptionContainerProps = {
   onSelectionChange: (selectionOrder: string[]) => void;
 
   onAddOptionClick?: (optionContainerName: string) => void;
+
+  initialSelectedIds: string[];
 };
 
 export default function OptionContainer({
@@ -24,9 +26,10 @@ export default function OptionContainer({
   maxOptionsSelectable,
   onSelectionChange,
   onAddOptionClick,
+  initialSelectedIds,
 }: OptionContainerProps) {
   // [0] = most-recently-clicked, [..., last] = least-recently-clicked
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>(initialSelectedIds);
 
   const handleClick = (id: string) => {
     setSelectedIds((prev) => {
