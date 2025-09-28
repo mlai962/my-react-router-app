@@ -107,7 +107,7 @@ export default function BetHistory({
                   <div className="w-[45%] text-left">{bet.teamB.name}</div>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-x-2 justify-center text-center">
                   <div>
                     {bet.map}{" "}
                     {bet.line.lineType === LineType.HANDICAP
