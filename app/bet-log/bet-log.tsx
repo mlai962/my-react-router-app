@@ -215,7 +215,7 @@ export function BetLog({ _users, _teams, _lines }: BetLogProps) {
         ? " teams"
         : addOptionModalOptionContainerName.toLowerCase();
 
-    if (collectionName === "Maps") {
+    if (collectionName === "maps") {
       setMaps((prev) => [
         ...prev,
         { id: `newOptionName-${Date.now()}`, name: newOptionName },
