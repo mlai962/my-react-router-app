@@ -560,10 +560,16 @@ const calculateProfit = (userA: string, userB: string, bets: Bet[]) => {
   return bets.reduce((total, bet) => {
     var multiplier: number;
 
-    if (bet.odds == 1.33) {
-      multiplier = 4 / 3;
-    } else if (bet.odds == 1.66) {
-      multiplier = 5 / 3;
+    // Extract decimal part and check if it's .33 or .66
+    const decimalPart = Math.round((bet.odds % 1) * 100) / 100;
+    const integerPart = Math.floor(bet.odds);
+
+    if (Math.abs(decimalPart - 0.33) < 0.01) {
+      // For X.33, the fraction is (X*3 + 1)/3
+      multiplier = (integerPart * 3 + 1) / 3;
+    } else if (Math.abs(decimalPart - 0.66) < 0.01) {
+      // For X.66, the fraction is (X*3 + 2)/3
+      multiplier = (integerPart * 3 + 2) / 3;
     } else {
       multiplier = bet.odds;
     }
